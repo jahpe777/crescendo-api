@@ -7,56 +7,64 @@ const usersRouter = express.Router();
 const jsonParser = express.json();
 
 const serializeUser = user => ({
-  id: subscriber.id,
-  email: xss(subscriber.email),
-  created: subscriber.created
+  id: user.id,
+  user_email: xss(user.user_email),
+  image: xss(user.image),
+  facebook: xss(user.facebook),
+  twitter: xss(user.twitter),
+  instagram: xss(user.instagram),
+  youtube: xss(user.youtube),
+  soundcloud: xss(user.soundcloud),
+  bandcamp: xss(user.bandcamp),
+  contact_email: xss(user.contact_email),
+  created: user.created
 });
 
 usersRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
-    UsersService.getAllEmails(knexInstance)
-      .then(emails => res.json(emails.map(serializeSubscriber)))
+    UsersService.getAllUsers(knexInstance)
+      .then(users => res.json(users.map(serializeUser)))
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { email } = req.body;
+    const { user } = req.body;
 
-    if (email == null) {
+    if (user == null) {
       return res.status(400).json({
         error: {
-          message: `Supply a valid email`
+          message: `Supply a valid user`
         }
       });
     }
-    UsersService.insertEmail(req.app.get('db'), { email: email })
-      .then(email => {
+    UsersService.insertUser(req.app.get('db'), { user: user })
+      .then(user => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${email.id}`))
-          .json(serializeSubscriber(email));
+          .location(path.posix.join(req.originalUrl, `/${user.id}`))
+          .json(serializeSubscriber(user));
       })
       .catch(next);
   });
 
 usersRouter
-  .route('/:email_id')
+  .route('/:user_id')
   .all((req, res, next) => {
-    EmailsService.getById(req.app.get('db'), req.params.email_id)
-      .then(email => {
-        if (!email) {
+    UsersService.getById(req.app.get('db'), req.params.user_id)
+      .then(user => {
+        if (!user) {
           return res.status(404).json({
-            error: { message: `Email doesn't exist` }
+            error: { message: `User doesn't exist` }
           });
         }
-        res.email = email;
+        res.user = user;
         next();
       })
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeSubscriber(res.email));
+    res.json(serializeUser(res.user));
   })
   .patch((req, res, next) => {
     const possibleKeys = [
@@ -88,7 +96,7 @@ usersRouter
     ).then(() => res.send(204));
   })
   .delete((req, res, next) => {
-    UsersService.deleteEmail(req.app.get('db'), req.params.email_id)
+    UsersService.deleteUser(req.app.get('db'), req.params.user_id)
       .then(numRowsAffected => {
         res.status(204).end();
       })

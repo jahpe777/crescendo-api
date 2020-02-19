@@ -3,96 +3,68 @@ const express = require('express');
 const xss = require('xss');
 const SongsService = require('./songs-service');
 
-const emailsRouter = express.Router();
+const songsRouter = express.Router();
 const jsonParser = express.json();
 
-const serializeSubscriber = subscriber => ({
-  id: subscriber.id,
-  email: xss(subscriber.email),
-  created: subscriber.created
+const serializeSong = song => ({
+  user_id: song.user_id,
+  id: song.id,
+  song: xss(song.song),
+  created: song.created
 });
 
-emailsRouter
+songsRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
-    EmailsService.getAllEmails(knexInstance)
-      .then(emails => res.json(emails.map(serializeSubscriber)))
+    SongsService.getAllSongs(knexInstance)
+      .then(songs => res.json(songs.map(serializeSong)))
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { email } = req.body;
+    const { song } = req.body;
 
-    if (email == null) {
+    if (song == null) {
       return res.status(400).json({
         error: {
-          message: `Supply a valid email`
+          message: `Supply a valid link for a song`
         }
       });
     }
-    EmailsService.insertEmail(req.app.get('db'), { email: email })
-      .then(email => {
+    SongsService.insertSong(req.app.get('db'), { song: song })
+      .then(song => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${email.id}`))
-          .json(serializeSubscriber(email));
+          .location(path.posix.join(req.originalUrl, `/${song.id}`))
+          .json(serializeSong(song));
       })
       .catch(next);
   });
 
-emailsRouter
-  .route('/:email_id')
+songsRouter
+  .route('/:song_id')
   .all((req, res, next) => {
-    EmailsService.getById(req.app.get('db'), req.params.email_id)
-      .then(email => {
-        if (!email) {
+    SongsService.getById(req.app.get('db'), req.params.song_id)
+      .then(song => {
+        if (!song) {
           return res.status(404).json({
-            error: { message: `Email doesn't exist` }
+            error: { message: `Song link doesn't exist` }
           });
         }
-        res.email = email;
+        res.song = song;
         next();
       })
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeSubscriber(res.email));
-  })
-  .patch((req, res, next) => {
-    const possibleKeys = [
-      'facebook',
-      'contactEmail',
-      'twitter',
-      'image',
-      'instagram',
-      'youtube',
-      'soundcloud',
-      'bandcamp'
-    ];
-    const { update } = req.body;
-    /*
-      update:{contactEmail:'test@test.com'}
-      update:{youtube:'...',image:'...',facebook:'...'}
-
-    */
-    Object.keys(update).forEach(key => {
-      if (!possibleKeys.includes(key)) {
-        res.status(400).json({ error: `${key} is not a valid key` });
-      }
-    });
-
-    EmailsService.updateMember(
-      req.app.get('db'),
-      req.params.email_id,
-      update
-    ).then(() => res.send(204));
+    res.json(serializeSong(res.song));
   })
   .delete((req, res, next) => {
-    EmailsService.deleteEmail(req.app.get('db'), req.params.email_id)
+    SongsService.deleteSong(req.app.get('db'), req.params.song_id)
       .then(numRowsAffected => {
         res.status(204).end();
       })
       .catch(next);
   });
 
-module.exports = emailsRouter;
+module.exports = songsRouter;

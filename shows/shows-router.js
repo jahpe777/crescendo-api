@@ -1,86 +1,75 @@
-const path = require('path')
-const express = require('express')
-const xss = require('xss')
-const ShowsService = require('./shows-service')
+const path = require('path');
+const express = require('express');
+const xss = require('xss');
+const ShowsService = require('./shows-service');
 const moment = require('moment');
 
-const showsRouter = express.Router()
-const jsonParser = express.json()
+const showsRouter = express.Router();
+const jsonParser = express.json();
 
 const serializeShow = show => {
-
   let formatDate = moment(show.date).format('L');
 
-  return ({
-  id: show.id,
-  date: xss(formatDate),
-  city: xss(show.city),
-  venue: xss(show.venue),
-  created: show.created
-})}
+  return {
+    id: show.id,
+    date: xss(formatDate),
+    city: xss(show.city),
+    venue: xss(show.venue),
+    created: show.created
+  };
+};
 
 showsRouter
   .route('/')
   .get((req, res, next) => {
-    const knexInstance = req.app.get('db')
+    const knexInstance = req.app.get('db');
     ShowsService.getAllShows(knexInstance)
-      .then(shows => 
-        res.json(shows.map(serializeShow))
-      )
-      .catch(next)
+      .then(shows => res.json(shows.map(serializeShow)))
+      .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { date, city, venue } = req.body.show
-    if((date == null || city == null || venue == null)) {
+    const { date, city, venue } = req.body.show;
+    if (date == null || city == null || venue == null) {
       return res.status(400).json({
         error: {
           message: `'date', 'city', & 'venue' are required`
         }
-      })
+      });
     }
-    ShowsService.insertShow(
-      req.app.get('db'),
-      { date, city, venue }
-    )
+    ShowsService.insertShow(req.app.get('db'), { date, city, venue })
       .then(show => {
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${show.id}`))
-          .json(serializeShow(show))
+          .json(serializeShow(show));
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
 showsRouter
   .route('/:show_id')
   .all((req, res, next) => {
-    ShowsService.getById(
-      req.app.get('db'),
-      req.params.show_id
-    )
+    ShowsService.getById(req.app.get('db'), req.params.show_id)
       .then(show => {
         if (!show) {
           return res.status(404).json({
             error: { message: `Show doesn't exist` }
-          })
+          });
         }
-        res.show = show
-        next()
+        res.show = show;
+        next();
       })
-      .catch(next)
+      .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeShow(res.show))
+    res.json(serializeShow(res.show));
   })
   .delete((req, res, next) => {
-    ShowsService.deleteShow(
-      req.app.get('db'),
-      req.params.show_id
-    )
+    ShowsService.deleteShow(req.app.get('db'), req.params.show_id)
       .then(numRowsAffected => {
-        res.status(204).end()
+        res.status(204).end();
       })
-      .catch(next)
-  })
+      .catch(next);
+  });
 
-module.exports = showsRouter
+module.exports = showsRouter;

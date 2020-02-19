@@ -1,12 +1,12 @@
 const UsersService = {
-  getAllEmails(knex) {
-    return knex.select('*').from('subscribers');
+  getAllUsers(knex) {
+    return knex.select('*').from('users');
   },
 
-  insertEmail(knex, newEmail) {
+  insertUser(knex, newUser) {
     return knex
-      .insert(newEmail)
-      .into('subscribers')
+      .insert(newUser)
+      .into('users')
       .returning('*')
       .then(rows => {
         return rows[0];
@@ -15,25 +15,26 @@ const UsersService = {
 
   getById(knex, id) {
     return knex
-      .from('subscribers')
+      .from('users')
       .select('*')
       .where('id', id)
       .first();
   },
 
-  deleteEmail(knex, id) {
-    return knex('subscribers')
+  deleteUser(knex, id) {
+    return knex('users')
       .where('id', id)
       .delete();
   },
 
-  updateEmail(knex, id, newEmail) {
-    return knex('subscribers')
+  updateUser(knex, id, newUser) {
+    return knex('users')
       .where({ id })
-      .update(newEmail);
+      .update(newUser);
   },
+
   updateMember(knex, id, update) {
-    return knex('subscribers')
+    return knex('users')
       .where({ id })
       .update(update);
   }
