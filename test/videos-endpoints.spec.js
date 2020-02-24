@@ -28,7 +28,7 @@ describe('Videos Endpoints', () => {
       });
     });
 
-    context('Given there are videoss in the database', () => {
+    context('Given there are videos in the database', () => {
       const testVideos = fixtures.makeVideossArray();
 
       beforeEach('insert videos', () => {

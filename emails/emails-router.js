@@ -7,6 +7,7 @@ const emailsRouter = express.Router();
 const jsonParser = express.json();
 
 const serializeEmail = email => ({
+  user_id: email.user_id,
   id: email.id,
   email: xss(email.email),
   created: email.created

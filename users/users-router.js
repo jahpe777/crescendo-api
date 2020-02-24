@@ -29,21 +29,31 @@ usersRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { user } = req.body;
+    const {
+      user_email,
+      image,
+      facebook,
+      twitter,
+      instagram,
+      youtube,
+      soundcloud,
+      bandcamp,
+      contact_email
+    } = req.body;
 
-    if (user == null) {
+    if (user_email == null || image == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid user`
         }
       });
     }
-    UsersService.insertUser(req.app.get('db'), { user: user })
+    UsersService.insertUser(req.app.get('db'), { user_email, image })
       .then(user => {
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user.id}`))
-          .json(serializeSubscriber(user));
+          .json(serializeUser(user));
       })
       .catch(next);
   });

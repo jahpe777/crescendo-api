@@ -11,6 +11,7 @@ const serializeShow = show => {
   let formatDate = moment(show.date).format('L');
 
   return {
+    user_id: show.user_id,
     id: show.id,
     date: xss(formatDate),
     city: xss(show.city),

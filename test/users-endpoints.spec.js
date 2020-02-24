@@ -1,212 +1,206 @@
-const knex = require('knex')
-const fixtures = require('./emails-fixtures')
-const app = require('../src/app')
+const knex = require('knex');
+const fixtures = require('./users-fixtures');
+const app = require('../src/app');
 
-describe('Emails Endpoints', () => {
-  let db
+describe('Users Endpoints', () => {
+  let db;
 
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
-      connection: process.env.TEST_DATABASE_URL,
-    })
-    app.set('db', db)
-  })
+      connection: process.env.TEST_DATABASE_URL
+    });
+    app.set('db', db);
+  });
 
-  after('disconnect from db', () => db.destroy())
+  after('disconnect from db', () => db.destroy());
 
-  before('cleanup', () => db('subscribers').truncate())
+  before('cleanup', () => db('users').truncate());
 
-  afterEach('cleanup', () => db('subscribers').truncate())
+  afterEach('cleanup', () => db('users').truncate());
 
-  describe('GET /api/emails', () => {
-    context(`Given no emails`, () => {
+  describe('GET /api/users', () => {
+    context(`Given no users`, () => {
       it(`responds with 200 and an empty list`, () => {
         return supertest(app)
-          .get('/api/emails')
-          .expect(200, [])
-      })
-    })
+          .get('/api/users')
+          .expect(200, []);
+      });
+    });
 
-    context('Given there are emails in the database', () => {
-      const testEmails = fixtures.makeEmailsArray()
+    context('Given there are users in the database', () => {
+      const testUsers = fixtures.makeUsersArray();
 
-      beforeEach('insert emails', () => {
-        return db
-          .into('subscribers')
-          .insert(testEmails)
-      })
+      beforeEach('insert users', () => {
+        return db.into('users').insert(testUsers);
+      });
 
-      it('gets the emails from the store', () => {
+      it('gets the users from the store', () => {
         return supertest(app)
-          .get('/api/emails')
-          .expect(200, testEmails)
-      })
-    })
+          .get('/api/users')
+          .expect(200, testUsers);
+      });
+    });
 
-    context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail()
+    context(`Given an XSS attack user`, () => {
+      const { maliciousUser, expectedUser } = fixtures.makeMaliciousUser();
 
-      beforeEach('insert malicious email', () => {
-        return db
-          .into('subscribers')
-          .insert([maliciousEmail])
-      })
+      beforeEach('insert malicious user', () => {
+        return db.into('users').insert([maliciousUser]);
+      });
 
       it('removes XSS attack content', () => {
         return supertest(app)
-          .get(`/api/emails`)
+          .get(`/api/users`)
           .expect(200)
           .expect(res => {
-            expect(res.body[0].email).to.eql(expectedEmail.email)
-          })
-      })
-    })
-  })
+            expect(res.body[0].user).to.eql(expectedUser.user);
+          });
+      });
+    });
+  });
 
-  describe('GET /api/emails/:email_id', () => {
-    context(`Given no emails`, () => {
-      it(`responds 404 when email doesn't exist`, () => {
+  describe('GET /api/users/:user_id', () => {
+    context(`Given no users`, () => {
+      it(`responds 404 when user doesn't exist`, () => {
         return supertest(app)
-          .get(`/api/emails/123`)
+          .get(`/api/users/123`)
           .expect(404, {
-            error: { message: `Email doesn't exist` }
-          })
-      })
-    })
+            error: { message: `User doesn't exist` }
+          });
+      });
+    });
 
-    context('Given there are emails in the database', () => {
-      const testEmails = fixtures.makeEmailsArray()
+    context('Given there are users in the database', () => {
+      const testUsers = fixtures.makeUsersArray();
 
-      beforeEach('insert emails', () => {
-        return db
-          .into('subscribers')
-          .insert(testEmails)
-      })
+      beforeEach('insert users', () => {
+        return db.into('users').insert(testUsers);
+      });
 
-      it('responds with 200 and the specified email', () => {
-        const emailId = 2
-        const expectedEmail = testEmails[emailId - 1]
+      it('responds with 200 and the specified user', () => {
+        const userId = 2;
+        const expectedUser = testUsers[userId - 1];
         return supertest(app)
-          .get(`/api/emails/${emailId}`)
-          .expect(200, expectedEmail)
-      })
-    })
+          .get(`/api/users/${userId}`)
+          .expect(200, expectedUser);
+      });
+    });
 
-    context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail()
+    context(`Given an XSS attack user`, () => {
+      const { maliciousUser, expectedUser } = fixtures.makeMaliciousUser();
 
-      beforeEach('insert malicious email', () => {
-        return db
-          .into('subscribers')
-          .insert([maliciousEmail])
-      })
+      beforeEach('insert malicious user', () => {
+        return db.into('users').insert([maliciousUser]);
+      });
 
       it('removes XSS attack content', () => {
         return supertest(app)
-          .get(`/api/emails/${maliciousEmail.id}`)
+          .get(`/api/users/${maliciousUser.id}`)
           .expect(200)
           .expect(res => {
-            expect(res.body.email).to.eql(expectedEmail.email)
-          })
-      })
-    })
-  })
+            expect(res.body.user).to.eql(expectedUser.user);
+          });
+      });
+    });
+  });
 
-  describe('DELETE /api/emails/:email_id', () => {
-    context(`Given no emails`, () => {
-      it(`responds 404 when email doesn't exist`, () => {
+  describe('DELETE /api/users/:user_id', () => {
+    context(`Given no users`, () => {
+      it(`responds 404 when user doesn't exist`, () => {
         return supertest(app)
-          .delete(`/api/emails/123`)
+          .delete(`/api/users/123`)
           .expect(404, {
-            error: { message: `Email doesn't exist` }
-          })
-      })
-    })
+            error: { message: `User doesn't exist` }
+          });
+      });
+    });
 
-    context('Given there are emails in the database', () => {
-      const testEmails = fixtures.makeEmailsArray()
+    context('Given there are users in the database', () => {
+      const testUsers = fixtures.makeUsersArray();
 
-      beforeEach('insert emails', () => {
-        return db
-          .into('subscribers')
-          .insert(testEmails)
-      })
+      beforeEach('insert users', () => {
+        return db.into('users').insert(testUsers);
+      });
 
-      it('removes the email by ID from the store', () => {
-        const idToRemove = 2
-        const expectedEmails = testEmails.filter(bm => bm.id !== idToRemove)
+      it('removes the user by ID from the store', () => {
+        const idToRemove = 2;
+        const expectedUsers = testUsers.filter(bm => bm.id !== idToRemove);
         return supertest(app)
-          .delete(`/api/emails/${idToRemove}`)
+          .delete(`/api/users/${idToRemove}`)
           .expect(204)
           .then(() =>
             supertest(app)
-              .get(`/api/emails`)
-              .expect(expectedEmails)
-          )
-      })
-    })
-  })
+              .get(`/api/users`)
+              .expect(expectedUsers)
+          );
+      });
+    });
+  });
 
-  describe('POST /api/emails', () => {
-    ['email'].forEach(field => {
-      const newEmail = {
-        email: 'lauren@gmail.com',
-      }
+  describe('POST /api/users', () => {
+    ['user'].forEach(field => {
+      const newUser = {
+        user_email: 'interpol@gmail.com',
+        image:
+          'https://media.pitchfork.com/photos/5b1efc8425d5df5ff053e5f1/2:1/w_790/Interpol.jpg'
+      };
 
-      it(`responds with 400 missing valid email`, () => {
-        delete newEmail[field]
+      it(`responds with 400 missing valid user`, () => {
+        delete newUser[field];
 
         return supertest(app)
-          .post(`/api/emails`)
-          .send(newEmail)
+          .post(`/api/users`)
+          .send(newUser)
           .expect(400, {
-            error: { message: `Supply a valid email` }
-          })
-      })
-    })
+            error: { message: `Supply a valid user` }
+          });
+      });
+    });
 
-    it(`responds with 400 invalid 'email' if not a valid email`, () => {
-      const invalidEmail = {
-        email: null,
-      }
+    it(`responds with 400 invalid 'user' if not a valid user`, () => {
+      const invalidUser = {
+        user_email: null
+      };
       return supertest(app)
-        .post(`/api/emails`)
-        .send(invalidEmail)
+        .post(`/api/users`)
+        .send(invalidUser)
         .expect(400, {
-          error: { message: `Supply a valid email` }
-        })
-    })
+          error: { message: `Supply a valid user` }
+        });
+    });
 
-    it('adds a new email to the store', () => {
-      const newEmail = {
-        email: 'lauren@gmail.com',
-      }
+    it('adds a new user to the store', () => {
+      const newUser = {
+        user_email: 'interpol@gmail.com',
+        image:
+          'https://media.pitchfork.com/photos/5b1efc8425d5df5ff053e5f1/2:1/w_790/Interpol.jpg'
+      };
       return supertest(app)
-        .post(`/api/emails`)
-        .send(newEmail)
+        .post(`/api/users`)
+        .send(newUser)
         .expect(201)
         .expect(res => {
-          expect(res.body.email).to.eql(newEmail.email)
-          expect(res.body).to.have.property('id')
-          expect(res.headers.location).to.eql(`/api/emails/${res.body.id}`)
+          expect(res.body.user).to.eql(newUser.user);
+          expect(res.body).to.have.property('id');
+          expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
         })
         .then(res =>
           supertest(app)
-            .get(`/api/emails/${res.body.id}`)
+            .get(`/api/users/${res.body.id}`)
             .expect(res.body)
-        )
-    })
+        );
+    });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail()
+      const { maliciousUser, expectedUser } = fixtures.makeMaliciousUser();
       return supertest(app)
-        .post(`/api/emails`)
-        .send(maliciousEmail)
+        .post(`/api/users`)
+        .send(maliciousUser)
         .expect(201)
         .expect(res => {
-          expect(res.body.email).to.eql(expectedEmail.email)
-        })
-    })
-  })
-})
+          expect(res.body.user).to.eql(expectedUser.user);
+        });
+    });
+  });
+});
