@@ -29,15 +29,15 @@ showsRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { date, city, venue } = req.body.show;
-    if (date == null || city == null || venue == null) {
+    const { date, city, venue, user_id } = req.body.show;
+    if (date == null || city == null || venue == null || user_id == null) {
       return res.status(400).json({
         error: {
           message: `'date', 'city', & 'venue' are required`
         }
       });
     }
-    ShowsService.insertShow(req.app.get('db'), { date, city, venue })
+    ShowsService.insertShow(req.app.get('db'), { date, city, venue, user_id })
       .then(show => {
         res
           .status(201)

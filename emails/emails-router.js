@@ -22,16 +22,16 @@ emailsRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { email } = req.body;
+    const { user_id, email } = req.body;
 
-    if (email == null) {
+    if (user_id == null || email == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid email`
         }
       });
     }
-    EmailsService.insertEmail(req.app.get('db'), { email: email })
+    EmailsService.insertEmail(req.app.get('db'), { user_id, email })
       .then(email => {
         res
           .status(201)
