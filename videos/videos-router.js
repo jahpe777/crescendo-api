@@ -22,16 +22,16 @@ videosRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { video } = req.body;
+    const { user_id, video } = req.body;
 
-    if (video == null) {
+    if (user_id == null || video == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid link for a video`
         }
       });
     }
-    VideosService.insertVideo(req.app.get('db'), { video: video })
+    VideosService.insertVideo(req.app.get('db'), { user_id, video })
       .then(video => {
         res
           .status(201)

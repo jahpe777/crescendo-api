@@ -22,16 +22,16 @@ songsRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { song } = req.body;
+    const { user_id, song } = req.body;
 
-    if (song == null) {
+    if (user_id == null || song == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid link for a song`
         }
       });
     }
-    SongsService.insertSong(req.app.get('db'), { song: song })
+    SongsService.insertSong(req.app.get('db'), { user_id, song })
       .then(song => {
         res
           .status(201)
