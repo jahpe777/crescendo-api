@@ -29,26 +29,16 @@ usersRouter
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const {
-      user_email,
-      image,
-      facebook,
-      twitter,
-      instagram,
-      youtube,
-      soundcloud,
-      bandcamp,
-      contact_email
-    } = req.body;
+    const { user_email } = req.body;
 
-    if (user_email == null || image == null) {
+    if (user_email == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid user`
         }
       });
     }
-    UsersService.insertUser(req.app.get('db'), { user_email, image })
+    UsersService.insertUser(req.app.get('db'), { user_email })
       .then(user => {
         res
           .status(201)
@@ -59,9 +49,9 @@ usersRouter
   });
 
 usersRouter
-  .route('/:user_id')
+  .route('/:id')
   .all((req, res, next) => {
-    UsersService.getById(req.app.get('db'), req.params.user_id)
+    UsersService.getById(req.app.get('db'), req.params.id)
       .then(user => {
         if (!user) {
           return res.status(404).json({
@@ -76,7 +66,7 @@ usersRouter
   .get((req, res, next) => {
     res.json(serializeUser(res.user));
   })
-  .patch((req, res, next) => {
+  .patch(jsonParser, (req, res, next) => {
     const possibleKeys = [
       'image',
       'facebook',
@@ -87,26 +77,24 @@ usersRouter
       'bandcamp',
       'contact_email'
     ];
-    const { update } = req.body;
+    const { newUpdate } = req.body;
     /*
-      update:{contactEmail:'test@test.com'}
-      update:{youtube:'...',image:'...',facebook:'...'}
-
+      newUpdate:{contactEmail:'test@test.com'}
+      newUpdate:{youtube:'...',image:'...',facebook:'...'}
     */
-    Object.keys(update).forEach(key => {
+    console.log(req);
+    Object.keys(newUpdate).forEach(key => {
       if (!possibleKeys.includes(key)) {
         res.status(400).json({ error: `${key} is not a valid key` });
       }
     });
 
-    UsersService.updateMember(
-      req.app.get('db'),
-      req.params.email_id,
-      update
-    ).then(() => res.send(204));
+    UsersService.updateUser(req.app.get('db'), req.params.id, newUpdate).then(
+      () => res.send(204)
+    );
   })
   .delete((req, res, next) => {
-    UsersService.deleteUser(req.app.get('db'), req.params.user_id)
+    UsersService.deleteUser(req.app.get('db'), req.params.id)
       .then(numRowsAffected => {
         res.status(204).end();
       })

@@ -1,6 +1,6 @@
 # Crescendo API
 
-https://fierce-hollows-84409.herokuapp.com/
+URL HERE
 
 The api for the Crescendo app was created with Node JS. It uses a database with tables for the shows and the subscribers. The api uses Express, Morgan, CORS and Knex. For testing I used supertest and mocha.
 
@@ -10,7 +10,8 @@ There is currently no authentication.
 
 The Crescendo API is organized around REST. It accepts standard GET, POST, and DELETE requests for shows and subscribers. The API returns JSON encoded responses.
 
-All API calls begin with: https://fierce-hollows-84409.herokuapp.com/api/
+All API calls begin with:
+URL HERE
 
 ### Users
 

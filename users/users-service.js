@@ -27,16 +27,10 @@ const UsersService = {
       .delete();
   },
 
-  updateUser(knex, id, newUser) {
+  updateUser(knex, id, newUpdate) {
     return knex('users')
       .where({ id })
-      .update(newUser);
-  },
-
-  updateMember(knex, id, update) {
-    return knex('users')
-      .where({ id })
-      .update(update);
+      .update(newUpdate);
   }
 };
 
