@@ -77,12 +77,11 @@ usersRouter
       'bandcamp',
       'contact_email'
     ];
-    const { newUpdate } = req.body;
+    const newUpdate = req.body;
     /*
       newUpdate:{contactEmail:'test@test.com'}
       newUpdate:{youtube:'...',image:'...',facebook:'...'}
     */
-    console.log(req);
     Object.keys(newUpdate).forEach(key => {
       if (!possibleKeys.includes(key)) {
         res.status(400).json({ error: `${key} is not a valid key` });
