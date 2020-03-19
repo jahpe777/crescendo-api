@@ -1,3 +1,5 @@
+const xss = require('xss');
+
 const VideosService = {
   getAllVideos(knex) {
     return knex.select('*').from('videos');
@@ -25,6 +27,15 @@ const VideosService = {
     return knex('videos')
       .where('id', id)
       .delete();
+  },
+
+  serializeVideo(video) {
+    return {
+      user_id: video.user_id,
+      id: video.id,
+      video: xss(video.video),
+      created: video.created
+    };
   }
 };
 

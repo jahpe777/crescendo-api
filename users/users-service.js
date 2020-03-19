@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const xss = require('xss');
+
 const UsersService = {
   getAllUsers(knex) {
     return knex.select('*').from('users');

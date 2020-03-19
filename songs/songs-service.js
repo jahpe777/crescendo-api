@@ -1,3 +1,5 @@
+const xss = require('xss');
+
 const SongsService = {
   getAllSongs(knex) {
     return knex.select('*').from('songs');
@@ -25,6 +27,15 @@ const SongsService = {
     return knex('songs')
       .where('id', id)
       .delete();
+  },
+
+  serializeSong(song) {
+    return {
+      user_id: song.user_id,
+      id: song.id,
+      song: xss(song.song),
+      created: song.created
+    };
   }
 };
 

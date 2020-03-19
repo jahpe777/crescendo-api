@@ -1,3 +1,5 @@
+const xss = require('xss');
+
 const EmailsService = {
   getAllEmails(knex) {
     return knex.select('*').from('emails');
@@ -25,6 +27,15 @@ const EmailsService = {
     return knex('emails')
       .where('id', id)
       .delete();
+  },
+
+  serializeEmail(email) {
+    return {
+      user_id: email.user_id,
+      id: email.id,
+      email: xss(email.email),
+      created: email.created
+    };
   }
 };
 

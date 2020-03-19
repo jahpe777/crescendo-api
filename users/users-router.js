@@ -3,7 +3,6 @@ const path = require('path');
 const UsersService = require('./users-service');
 const usersRouter = express.Router();
 const jsonParser = express.json();
-const xss = require('xss');
 const { requireAuth } = require('../middleware/jwt-auth');
 
 usersRouter
@@ -70,7 +69,7 @@ usersRouter
       .catch(next);
   })
   .get((req, res, next) => {
-    res.json(serializeUser(res.user));
+    res.json(UsersService.serializeUser(res.user));
   })
   .patch(jsonParser, (req, res, next) => {
     const possibleKeys = [

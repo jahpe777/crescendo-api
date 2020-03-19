@@ -1,28 +1,19 @@
 const path = require('path');
 const express = require('express');
-const xss = require('xss');
 const EmailsService = require('./emails-service');
 const { requireAuth } = require('../middleware/jwt-auth');
-
 const emailsRouter = express.Router();
-const jsonParser = express.json();
-
-const serializeEmail = email => ({
-  user_id: email.user_id,
-  id: email.id,
-  email: xss(email.email),
-  created: email.created
-});
+const jsonBodyParser = express.json();
 
 emailsRouter
   .route('/')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     EmailsService.getAllEmails(knexInstance)
-      .then(emails => res.json(emails.map(serializeEmail)))
+      .then(emails => res.json(emails.map(EmailsService.serializeEmail)))
       .catch(next);
   })
-  .post(jsonParser, requireAuth, (req, res, next) => {
+  .post(jsonBodyParser, requireAuth, (req, res, next) => {
     const { email } = req.body;
 
     if (email == null) {
@@ -40,14 +31,14 @@ emailsRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${email.id}`))
-          .json(serializeEmail(email));
+          .json(EmailsService.serializeEmail(email));
       })
       .catch(next);
   });
 
 emailsRouter
   .route('/:email_id')
-  .all((req, res, next) => {
+  .all(requireAuth, (req, res, next) => {
     EmailsService.getById(req.app.get('db'), req.params.email_id)
       .then(email => {
         if (!email) {
@@ -60,10 +51,10 @@ emailsRouter
       })
       .catch(next);
   })
-  .get((req, res, next) => {
-    res.json(serializeEmail(res.email));
+  .get(requireAuth, (req, res, next) => {
+    res.json(EmailsService.serializeEmail(res.email));
   })
-  .delete((req, res, next) => {
+  .delete(requireAuth, (req, res, next) => {
     EmailsService.deleteEmail(req.app.get('db'), req.params.email_id)
       .then(numRowsAffected => {
         res.status(204).end();

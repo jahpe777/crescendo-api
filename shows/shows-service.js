@@ -1,3 +1,6 @@
+const xss = require('xss');
+const moment = require('moment');
+
 const ShowsService = {
   getAllShows(knex) {
     return knex.select('*').from('shows');
@@ -27,10 +30,18 @@ const ShowsService = {
       .delete();
   },
 
-  updateShow(knex, id, newShow) {
-    return knex('shows')
-      .where({ id })
-      .update(newShow);
+  serializeShow(show) {
+    console.log(show);
+    let formatDate = moment(show.date).format('L');
+
+    return {
+      user_id: show.user_id,
+      id: show.id,
+      date: xss(formatDate),
+      city: xss(show.city),
+      venue: xss(show.venue),
+      created: show.created
+    };
   }
 };
 
