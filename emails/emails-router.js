@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const EmailsService = require('./emails-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const emailsRouter = express.Router();
 const jsonParser = express.json();
@@ -21,17 +22,20 @@ emailsRouter
       .then(emails => res.json(emails.map(serializeEmail)))
       .catch(next);
   })
-  .post(jsonParser, (req, res, next) => {
-    const { user_id, email } = req.body;
+  .post(jsonParser, requireAuth, (req, res, next) => {
+    const { email } = req.body;
 
-    if (user_id == null || email == null) {
+    if (email == null) {
       return res.status(400).json({
         error: {
           message: `Supply a valid email`
         }
       });
     }
-    EmailsService.insertEmail(req.app.get('db'), { user_id, email })
+    EmailsService.insertEmail(req.app.get('db'), {
+      user_id: req.user.id,
+      email
+    })
       .then(email => {
         res
           .status(201)

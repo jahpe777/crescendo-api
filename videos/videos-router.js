@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const VideosService = require('./videos-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const videosRouter = express.Router();
 const jsonParser = express.json();

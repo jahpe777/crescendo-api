@@ -1,49 +1,55 @@
-const path = require('path');
 const express = require('express');
-const xss = require('xss');
+const path = require('path');
 const UsersService = require('./users-service');
-
 const usersRouter = express.Router();
 const jsonParser = express.json();
-
-const serializeUser = user => ({
-  id: user.id,
-  user_email: xss(user.user_email),
-  image: xss(user.image),
-  facebook: xss(user.facebook),
-  twitter: xss(user.twitter),
-  instagram: xss(user.instagram),
-  youtube: xss(user.youtube),
-  soundcloud: xss(user.soundcloud),
-  bandcamp: xss(user.bandcamp),
-  contact_email: xss(user.contact_email),
-  created: user.created
-});
+const xss = require('xss');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 usersRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
     UsersService.getAllUsers(knexInstance)
-      .then(users => res.json(users.map(serializeUser)))
+      .then(users => res.json(users.map(UsersService.serializeUser)))
       .catch(next);
   })
   .post(jsonParser, (req, res, next) => {
-    const { user_email } = req.body;
+    const { user_email, password } = req.body;
 
     if (user_email == null) {
       return res.status(400).json({
         error: {
-          message: `Supply a valid user`
+          message: `Supply a valid email`
         }
       });
     }
-    UsersService.insertUser(req.app.get('db'), { user_email })
-      .then(user => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user.id}`))
-          .json(serializeUser(user));
+
+    const passwordError = UsersService.validatePassword(password);
+
+    if (passwordError) return res.status(400).json({ error: passwordError });
+
+    UsersService.hasUserWithUserName(req.app.get('db'), user_email)
+      .then(hasUserWithUserName => {
+        if (hasUserWithUserName)
+          return res.status(400).json({ error: `Username already taken` });
+
+        return UsersService.hashPassword(password).then(hashedPassword => {
+          const newUser = {
+            user_email,
+            password: hashedPassword,
+            created: 'now()'
+          };
+
+          return UsersService.insertUser(req.app.get('db'), newUser).then(
+            user => {
+              res
+                .status(201)
+                .location(path.posix.join(req.originalUrl, `/${user.id}`))
+                .json(UsersService.serializeUser(user));
+            }
+          );
+        });
       })
       .catch(next);
   });

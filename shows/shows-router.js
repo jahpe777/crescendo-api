@@ -3,6 +3,7 @@ const express = require('express');
 const xss = require('xss');
 const ShowsService = require('./shows-service');
 const moment = require('moment');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const showsRouter = express.Router();
 const jsonParser = express.json();

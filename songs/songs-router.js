@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const xss = require('xss');
 const SongsService = require('./songs-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const songsRouter = express.Router();
 const jsonParser = express.json();
