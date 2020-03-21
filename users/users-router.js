@@ -7,13 +7,13 @@ const { requireAuth } = require('../middleware/jwt-auth');
 
 usersRouter
   .route('/')
-  .get(requireAuth, (req, res, next) => {
+  .get((req, res, next) => {
     const knexInstance = req.app.get('db');
     UsersService.getAllUsers(knexInstance)
       .then(users => res.json(users.map(UsersService.serializeUser)))
       .catch(next);
   })
-  .post(jsonParser, (req, res, next) => {
+  .post(requireAuth, jsonParser, (req, res, next) => {
     const { user_email, password } = req.body;
 
     if (user_email == null) {
@@ -55,7 +55,7 @@ usersRouter
 
 usersRouter
   .route('/:id')
-  .all((req, res, next) => {
+  .all(requireAuth, (req, res, next) => {
     UsersService.getById(req.app.get('db'), req.params.id)
       .then(user => {
         if (!user) {
@@ -68,10 +68,10 @@ usersRouter
       })
       .catch(next);
   })
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     res.json(UsersService.serializeUser(res.user));
   })
-  .patch(jsonParser, (req, res, next) => {
+  .patch(requireAuth, jsonParser, (req, res, next) => {
     const possibleKeys = [
       'image',
       'facebook',
@@ -97,7 +97,7 @@ usersRouter
       () => res.send(204)
     );
   })
-  .delete((req, res, next) => {
+  .delete(requireAuth, (req, res, next) => {
     UsersService.deleteUser(req.app.get('db'), req.params.id)
       .then(numRowsAffected => {
         res.status(204).end();

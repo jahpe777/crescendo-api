@@ -31,7 +31,6 @@ const ShowsService = {
   },
 
   serializeShow(show) {
-    console.log(show);
     let formatDate = moment(show.date).format('L');
 
     return {
