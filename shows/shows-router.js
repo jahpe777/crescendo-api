@@ -7,9 +7,9 @@ const jsonBodyParser = express.json();
 
 showsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    ShowsService.getAllShows(knexInstance)
+    ShowsService.getAllShowsByUser(knexInstance, req.user.id)
       .then(shows => res.json(shows.map(ShowsService.serializeShow)))
       .catch(next);
   })

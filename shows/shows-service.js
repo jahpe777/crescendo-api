@@ -5,6 +5,12 @@ const ShowsService = {
   getAllShows(knex) {
     return knex.select('*').from('shows');
   },
+  getAllShowsByUser(knex, user_id) {
+    return knex
+      .select('*')
+      .from('shows')
+      .where('user_id', user_id);
+  },
 
   insertShow(knex, newShow) {
     return knex
