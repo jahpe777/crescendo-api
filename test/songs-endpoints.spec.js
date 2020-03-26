@@ -82,7 +82,7 @@ describe('Songs Endpoints', () => {
           .get(`/api/songs/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `Song doesn't exist` }
+            error: { message: `Song link doesn't exist` }
           });
       });
     });
@@ -128,7 +128,7 @@ describe('Songs Endpoints', () => {
           .delete(`/api/songs/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `Song doesn't exist` }
+            error: { message: `Song link doesn't exist` }
           });
       });
     });
@@ -170,7 +170,7 @@ describe('Songs Endpoints', () => {
           .set('Authorization', `Bearer ${authToken}`)
           .send(newSong)
           .expect(400, {
-            error: { message: `Supply a valid song` }
+            error: { message: `Supply a valid link for a song` }
           });
       });
     });
@@ -184,7 +184,7 @@ describe('Songs Endpoints', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send(invalidSong)
         .expect(400, {
-          error: { message: `Supply a valid song` }
+          error: { message: `Supply a valid link for a song` }
         });
     });
 

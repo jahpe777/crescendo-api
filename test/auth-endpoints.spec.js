@@ -28,7 +28,7 @@ describe('Auth Endpoints', () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     const requiredFields = ['user_email', 'password'];
-    // const testUser = testUsers[0];
+    const testUser = testUsers[0];
 
     requiredFields.forEach(field => {
       const loginAttemptBody = {

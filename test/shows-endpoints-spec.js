@@ -3,7 +3,7 @@ const fixtures = require('./shows-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe('Shows Endpoints', () => {
+describe.only('Shows Endpoints', () => {
   let db;
 
   const { testUsers, testShows } = helpers.makeShowsFixtures();

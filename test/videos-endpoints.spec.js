@@ -82,7 +82,7 @@ describe('Videos Endpoints', () => {
           .get(`/api/videos/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `Video doesn't exist` }
+            error: { message: `Video link doesn't exist` }
           });
       });
     });
@@ -128,7 +128,7 @@ describe('Videos Endpoints', () => {
           .delete(`/api/videos/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `video doesn't exist` }
+            error: { message: `Video link doesn't exist` }
           });
       });
     });
@@ -169,7 +169,7 @@ describe('Videos Endpoints', () => {
           .set('Authorization', `Bearer ${authToken}`)
           .send(newVideo)
           .expect(400, {
-            error: { message: `Supply a valid video` }
+            error: { message: `Supply a valid link for a video` }
           });
       });
     });
@@ -183,7 +183,7 @@ describe('Videos Endpoints', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send(invalidVideo)
         .expect(400, {
-          error: { message: `Supply a valid video` }
+          error: { message: `Supply a valid link for a video` }
         });
     });
 

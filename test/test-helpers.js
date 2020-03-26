@@ -41,18 +41,18 @@ function makeShowsArray(users) {
     {
       user_id: 1,
       id: 1,
-      date: '2020-04-12',
+      date: '2021-04-12',
       city: 'Orlando, FL',
       venue: 'Boo',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: new Date('2028-01-22T16:28:32.615Z')
     },
     {
       user_id: 2,
       id: 2,
-      date: '2020-05-12',
+      date: '2021-05-12',
       city: 'Miami, FL',
       venue: 'Who',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: new Date('2028-01-22T16:28:32.615Z')
     }
   ];
 }
@@ -68,7 +68,7 @@ function makeVideosArray(users) {
     {
       user_id: 2,
       id: 3,
-      text: 'https://www.youtube.com/embed/OJpC9JqSnJk',
+      video: 'https://www.youtube.com/embed/OJpC9JqSnJk',
       created: new Date('2029-01-22T16:28:32.615Z')
     }
   ];
@@ -99,7 +99,7 @@ function makeEmailsArray(users) {
       user_id: 1,
       id: 1,
       email: 'house@gmail.com',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: new Date('2028-01-22T16:28:32.615Z')
     },
     {
       user_id: 2,
@@ -337,9 +337,9 @@ function makeMaliciousVideo(user) {
 
 function makeVideosFixtures() {
   const testUsers = makeUsersArray();
-  const testShows = makeVideosArray(testUsers);
+  const testVideos = makeVideosArray(testUsers);
   // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers, testShows /*testComments*/ };
+  return { testUsers, testVideos /*testComments*/ };
 }
 
 function makeMaliciousSong(user) {
