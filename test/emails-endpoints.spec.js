@@ -3,7 +3,7 @@ const fixtures = require('./emails-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Emails Endpoints', () => {
+describe('Emails Endpoints', () => {
   let db;
 
   const { testUsers, testEmails } = helpers.makeEmailsFixtures();

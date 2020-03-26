@@ -1,13 +1,14 @@
 const knex = require('knex');
 const jwt = require('jsonwebtoken');
+const fixtures = require('./users-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe('Auth Endpoints', function() {
+describe('Auth Endpoints', () => {
   let db;
 
   const { testUsers } = helpers.makeUsersFixtures();
-  let authToken;
+  // let authToken;
 
   before('make knex instance', () => {
     db = knex({
@@ -27,6 +28,7 @@ describe('Auth Endpoints', function() {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     const requiredFields = ['user_email', 'password'];
+    // const testUser = testUsers[0];
 
     requiredFields.forEach(field => {
       const loginAttemptBody = {
