@@ -1,9 +1,13 @@
 const knex = require('knex');
 const fixtures = require('./videos-fixtures');
 const app = require('../src/app');
+const helpers = require('./test-helpers');
 
 describe('Videos Endpoints', () => {
   let db;
+
+  const { testUsers, testVideos } = helpers.makeVideosFixtures();
+  let authToken;
 
   before('make knex instance', () => {
     db = knex({
@@ -15,22 +19,31 @@ describe('Videos Endpoints', () => {
 
   after('disconnect from db', () => db.destroy());
 
-  before('cleanup', () => db('videos').truncate());
+  before('cleanup', () => helpers.cleanTables(db));
 
   afterEach('cleanup', () => db('videos').truncate());
+
+  before('insert users', () => {
+    helpers.seedUsers(db, testUsers);
+    return supertest(app)
+      .post('/api/auth/login')
+      .send(testUsers[0])
+      .then(res => {
+        authToken = res.body.authToken;
+      });
+  });
 
   describe('GET /api/videos', () => {
     context(`Given no videos`, () => {
       it(`responds with 200 and an empty list`, () => {
         return supertest(app)
           .get('/api/videos')
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, []);
       });
     });
 
     context('Given there are videos in the database', () => {
-      const testVideos = fixtures.makeVideossArray();
-
       beforeEach('insert videos', () => {
         return db.into('videos').insert(testVideos);
       });
@@ -38,6 +51,7 @@ describe('Videos Endpoints', () => {
       it('gets the videos from the store', () => {
         return supertest(app)
           .get('/api/videos')
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, testVideos);
       });
     });
@@ -52,6 +66,7 @@ describe('Videos Endpoints', () => {
       it('removes XSS attack content', () => {
         return supertest(app)
           .get(`/api/videos`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200)
           .expect(res => {
             expect(res.body[0].video).to.eql(expectedVideo.video);
@@ -65,6 +80,7 @@ describe('Videos Endpoints', () => {
       it(`responds 404 when video doesn't exist`, () => {
         return supertest(app)
           .get(`/api/videos/123`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
             error: { message: `Video doesn't exist` }
           });
@@ -72,8 +88,6 @@ describe('Videos Endpoints', () => {
     });
 
     context('Given there are videos in the database', () => {
-      const testVideos = fixtures.makeVideosArray();
-
       beforeEach('insert videos', () => {
         return db.into('videos').insert(testVideos);
       });
@@ -83,6 +97,7 @@ describe('Videos Endpoints', () => {
         const expectedVideo = testVideos[videoId - 1];
         return supertest(app)
           .get(`/api/videos/${videoId}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, expectedVideo);
       });
     });
@@ -97,6 +112,7 @@ describe('Videos Endpoints', () => {
       it('removes XSS attack content', () => {
         return supertest(app)
           .get(`/api/videos/${maliciousVideo.id}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200)
           .expect(res => {
             expect(res.body.video).to.eql(expectedVideo.video);
@@ -110,6 +126,7 @@ describe('Videos Endpoints', () => {
       it(`responds 404 when video doesn't exist`, () => {
         return supertest(app)
           .delete(`/api/videos/123`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
             error: { message: `video doesn't exist` }
           });
@@ -117,8 +134,6 @@ describe('Videos Endpoints', () => {
     });
 
     context('Given there are videos in the database', () => {
-      const testVideos = fixtures.makeVideosArray();
-
       beforeEach('insert videos', () => {
         return db.into('videos').insert(testVideos);
       });
@@ -128,10 +143,12 @@ describe('Videos Endpoints', () => {
         const expectedVideos = testVideos.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/videos/${idToRemove}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(204)
           .then(() =>
             supertest(app)
               .get(`/api/videos`)
+              .set('Authorization', `Bearer ${authToken}`)
               .expect(expectedVideos)
           );
       });
@@ -149,6 +166,7 @@ describe('Videos Endpoints', () => {
 
         return supertest(app)
           .post(`/api/videos`)
+          .set('Authorization', `Bearer ${authToken}`)
           .send(newVideo)
           .expect(400, {
             error: { message: `Supply a valid video` }
@@ -162,6 +180,7 @@ describe('Videos Endpoints', () => {
       };
       return supertest(app)
         .post(`/api/videos`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(invalidVideo)
         .expect(400, {
           error: { message: `Supply a valid video` }
@@ -174,6 +193,7 @@ describe('Videos Endpoints', () => {
       };
       return supertest(app)
         .post(`/api/videos`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(newVideo)
         .expect(201)
         .expect(res => {
@@ -184,6 +204,7 @@ describe('Videos Endpoints', () => {
         .then(res =>
           supertest(app)
             .get(`/api/videos/${res.body.id}`)
+            .set('Authorization', `Bearer ${authToken}`)
             .expect(res.body)
         );
     });
@@ -192,6 +213,7 @@ describe('Videos Endpoints', () => {
       const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo();
       return supertest(app)
         .post(`/api/videos`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(maliciousVideo)
         .expect(201)
         .expect(res => {

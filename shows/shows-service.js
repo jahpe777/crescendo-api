@@ -2,9 +2,10 @@ const xss = require('xss');
 const moment = require('moment');
 
 const ShowsService = {
-  getAllShows(knex) {
-    return knex.select('*').from('shows');
-  },
+  // getAllShows(knex) {
+  //   return knex.select('*').from('shows');
+  // },
+
   getAllShowsByUser(knex, user_id) {
     return knex
       .select('*')

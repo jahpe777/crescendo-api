@@ -7,9 +7,9 @@ const jsonBodyParser = express.json();
 
 songsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    SongsService.getAllSongs(knexInstance)
+    SongsService.getAllSongsByUser(knexInstance, req.user.id)
       .then(songs => res.json(songs.map(SongsService.serializeSong)))
       .catch(next);
   })

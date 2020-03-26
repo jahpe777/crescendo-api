@@ -1,9 +1,13 @@
 const knex = require('knex');
 const fixtures = require('./songs-fixtures');
 const app = require('../src/app');
+const helpers = require('./test-helpers');
 
 describe('Songs Endpoints', () => {
   let db;
+
+  const { testUsers, testSongs } = helpers.makeSongsFixtures();
+  let authToken;
 
   before('make knex instance', () => {
     db = knex({
@@ -15,22 +19,31 @@ describe('Songs Endpoints', () => {
 
   after('disconnect from db', () => db.destroy());
 
-  before('cleanup', () => db('songs').truncate());
+  before('cleanup', () => helpers.cleanTables(db));
 
   afterEach('cleanup', () => db('songs').truncate());
+
+  before('insert users', () => {
+    helpers.seedUsers(db, testUsers);
+    return supertest(app)
+      .post('/api/auth/login')
+      .send(testUsers[0])
+      .then(res => {
+        authToken = res.body.authToken;
+      });
+  });
 
   describe('GET /api/songs', () => {
     context(`Given no songs`, () => {
       it(`responds with 200 and an empty list`, () => {
         return supertest(app)
           .get('/api/songs')
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, []);
       });
     });
 
     context('Given there are songs in the database', () => {
-      const testSongs = fixtures.makeSongsArray();
-
       beforeEach('insert songs', () => {
         return db.into('songs').insert(testSongs);
       });
@@ -38,6 +51,7 @@ describe('Songs Endpoints', () => {
       it('gets the songs from the store', () => {
         return supertest(app)
           .get('/api/songs')
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, testSongs);
       });
     });
@@ -52,6 +66,7 @@ describe('Songs Endpoints', () => {
       it('removes XSS attack content', () => {
         return supertest(app)
           .get(`/api/songs`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200)
           .expect(res => {
             expect(res.body[0].song).to.eql(expectedSong.song);
@@ -65,6 +80,7 @@ describe('Songs Endpoints', () => {
       it(`responds 404 when song doesn't exist`, () => {
         return supertest(app)
           .get(`/api/songs/123`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
             error: { message: `Song doesn't exist` }
           });
@@ -72,8 +88,6 @@ describe('Songs Endpoints', () => {
     });
 
     context('Given there are songs in the database', () => {
-      const testSongs = fixtures.makeSongsArray();
-
       beforeEach('insert songs', () => {
         return db.into('songs').insert(testSongs);
       });
@@ -83,6 +97,7 @@ describe('Songs Endpoints', () => {
         const expectedSong = testSongs[songId - 1];
         return supertest(app)
           .get(`/api/songs/${songId}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200, expectedSong);
       });
     });
@@ -97,6 +112,7 @@ describe('Songs Endpoints', () => {
       it('removes XSS attack content', () => {
         return supertest(app)
           .get(`/api/songs/${maliciousSong.id}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(200)
           .expect(res => {
             expect(res.body.song).to.eql(expectedSong.song);
@@ -110,6 +126,7 @@ describe('Songs Endpoints', () => {
       it(`responds 404 when song doesn't exist`, () => {
         return supertest(app)
           .delete(`/api/songs/123`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
             error: { message: `Song doesn't exist` }
           });
@@ -117,8 +134,6 @@ describe('Songs Endpoints', () => {
     });
 
     context('Given there are songs in the database', () => {
-      const testSongs = fixtures.makeSongsArray();
-
       beforeEach('insert songs', () => {
         return db.into('songs').insert(testSongs);
       });
@@ -128,10 +143,12 @@ describe('Songs Endpoints', () => {
         const expectedSongs = testSongs.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/songs/${idToRemove}`)
+          .set('Authorization', `Bearer ${authToken}`)
           .expect(204)
           .then(() =>
             supertest(app)
               .get(`/api/songs`)
+              .set('Authorization', `Bearer ${authToken}`)
               .expect(expectedSongs)
           );
       });
@@ -150,6 +167,7 @@ describe('Songs Endpoints', () => {
 
         return supertest(app)
           .post(`/api/songs`)
+          .set('Authorization', `Bearer ${authToken}`)
           .send(newSong)
           .expect(400, {
             error: { message: `Supply a valid song` }
@@ -163,6 +181,7 @@ describe('Songs Endpoints', () => {
       };
       return supertest(app)
         .post(`/api/songs`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(invalidSong)
         .expect(400, {
           error: { message: `Supply a valid song` }
@@ -176,6 +195,7 @@ describe('Songs Endpoints', () => {
       };
       return supertest(app)
         .post(`/api/songs`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(newSong)
         .expect(201)
         .expect(res => {
@@ -186,6 +206,7 @@ describe('Songs Endpoints', () => {
         .then(res =>
           supertest(app)
             .get(`/api/songs/${res.body.id}`)
+            .set('Authorization', `Bearer ${authToken}`)
             .expect(res.body)
         );
     });
@@ -194,6 +215,7 @@ describe('Songs Endpoints', () => {
       const { maliciousSong, expectedSong } = fixtures.makeMaliciousSong();
       return supertest(app)
         .post(`/api/songs`)
+        .set('Authorization', `Bearer ${authToken}`)
         .send(maliciousSong)
         .expect(201)
         .expect(res => {

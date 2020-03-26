@@ -7,9 +7,9 @@ const jsonBodyParser = express.json();
 
 videosRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    VideosService.getAllVideos(knexInstance)
+    VideosService.getAllVideosByUser(knexInstance, req.user.id)
       .then(videos => res.json(videos.map(VideosService.serializeVideo)))
       .catch(next);
   })

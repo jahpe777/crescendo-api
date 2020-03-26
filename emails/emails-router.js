@@ -7,9 +7,9 @@ const jsonBodyParser = express.json();
 
 emailsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get(requireAuth, (req, res, next) => {
     const knexInstance = req.app.get('db');
-    EmailsService.getAllEmails(knexInstance)
+    EmailsService.getAllEmailsByUser(knexInstance, req.user.id)
       .then(emails => res.json(emails.map(EmailsService.serializeEmail)))
       .catch(next);
   })

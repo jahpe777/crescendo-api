@@ -1,8 +1,15 @@
 const xss = require('xss');
 
 const EmailsService = {
-  getAllEmails(knex) {
-    return knex.select('*').from('emails');
+  // getAllEmails(knex) {
+  //   return knex.select('*').from('emails');
+  // },
+
+  getAllEmailsByUser(knex, user_id) {
+    return knex
+      .select('*')
+      .from('emails')
+      .where('user_id', user_id);
   },
 
   insertEmail(knex, newEmail) {
