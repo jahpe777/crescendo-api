@@ -1,5 +1,4 @@
 const knex = require('knex');
-const fixtures = require('./emails-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
@@ -57,7 +56,7 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
 
       beforeEach('insert malicious email', () => {
         return db.into('emails').insert([maliciousEmail]);
@@ -103,7 +102,7 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
 
       beforeEach('insert malicious email', () => {
         return db.into('emails').insert([maliciousEmail]);
@@ -210,7 +209,7 @@ describe('Emails Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousEmail, expectedEmail } = fixtures.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
       return supertest(app)
         .post(`/api/emails`)
         .set('Authorization', `Bearer ${authToken}`)

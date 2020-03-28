@@ -1,5 +1,4 @@
 const knex = require('knex');
-const fixtures = require('./songs-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
@@ -57,7 +56,7 @@ describe('Songs Endpoints', () => {
     });
 
     context(`Given an XSS attack song`, () => {
-      const { maliciousSong, expectedSong } = fixtures.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
 
       beforeEach('insert malicious song', () => {
         return db.into('songs').insert([maliciousSong]);
@@ -103,7 +102,7 @@ describe('Songs Endpoints', () => {
     });
 
     context(`Given an XSS attack song`, () => {
-      const { maliciousSong, expectedSong } = fixtures.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
 
       beforeEach('insert malicious song', () => {
         return db.into('songs').insert([maliciousSong]);
@@ -212,7 +211,7 @@ describe('Songs Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousSong, expectedSong } = fixtures.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
       return supertest(app)
         .post(`/api/songs`)
         .set('Authorization', `Bearer ${authToken}`)

@@ -16,7 +16,7 @@ function makeUsersArray() {
       soundcloud: 'https://soundcloud.com/beachhouse',
       bandcamp: 'https://beachhouse.bandcamp.com/',
       contact_email: 'beach@gmail.com',
-      created: '2029-01-22T16:28:32.615Z'
+      created: new Date('2021-01-09T00:25:17.235Z')
     }
   ];
 }
@@ -29,7 +29,7 @@ function makeShowsArray(users) {
       date: '2021-05-13',
       city: 'Orlando, FL',
       venue: 'Boo',
-      created: '2028-01-22T16:28:32.615Z'
+      created: new Date('2021-01-09T00:25:17.235Z')
     }
   ];
 }
@@ -40,7 +40,7 @@ function makeVideosArray(users) {
       user_id: 1,
       id: 1,
       video: 'https://www.youtube.com/embed/OS6duOoxctw',
-      created: '2029-01-22T16:28:32.615Z'
+      created: new Date('2021-01-09T00:25:17.235Z')
     }
   ];
 }
@@ -52,7 +52,7 @@ function makeSongsArray(users) {
       id: 1,
       song:
         'https://bandcamp.com/EmbeddedPlayer/album=1030921102/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',
-      created: '2029-01-22T16:28:32.615Z'
+      created: new Date('2021-01-09T00:25:17.235Z')
     }
   ];
 }
@@ -63,38 +63,38 @@ function makeEmailsArray(users) {
       user_id: 1,
       id: 1,
       email: 'house@gmail.com',
-      created: '2028-01-22T16:28:32.615Z'
+      created: new Date('2021-01-09T00:25:17.235Z')
     }
   ];
 }
 
-function makeExpectedUser() {
-  const expectedUser = users.find(user => user.id === show.user_id);
+// function makeExpectedUser(users) {
+//   const showUser = users.find(user => user.id === show.user_id);
 
-  return {
-    user_id: show.user_id,
-    id: show.id,
-    date: show.date,
-    city: show.city,
-    venue: show.venue,
-    created: show.created.toISOString(),
-    showUser: {
-      id: showUser.id,
-      user_email: showUser.user_email,
-      password: showUser.password,
-      image: showUser.image,
-      facebook: showUser.facebook,
-      twitter: showUser.twitter,
-      instagram: showUser.instagram,
-      youtube: showUser.youtube,
-      soundcloud: showUser.soundcloud,
-      bandcamp: showUser.bandcamp,
-      contact_email: showUser.contact_email,
-      created: showUser.created.toISOString(),
-      modified: showUser.modified || null
-    }
-  };
-}
+//   return {
+//     user_id: show.user_id,
+//     id: show.id,
+//     date: show.date,
+//     city: show.city,
+//     venue: show.venue,
+//     created: show.created.toISOString(),
+//     showUser: {
+//       id: showUser.id,
+//       user_email: showUser.user_email,
+//       password: showUser.password,
+//       image: showUser.image,
+//       facebook: showUser.facebook,
+//       twitter: showUser.twitter,
+//       instagram: showUser.instagram,
+//       youtube: showUser.youtube,
+//       soundcloud: showUser.soundcloud,
+//       bandcamp: showUser.bandcamp,
+//       contact_email: showUser.contact_email,
+//       created: showUser.created.toISOString(),
+//       modified: showUser.modified || null
+//     }
+//   };
+// }
 
 function makeExpectedShow(users, show) {
   const showUser = users.find(user => user.id === show.user_id);
@@ -215,7 +215,7 @@ function makeMaliciousUser(user) {
     soundcloud: 'https://soundcloud.com/beachhouse',
     bandcamp: 'https://beachhouse.bandcamp.com/',
     contact_email: 'beach@gmail.com',
-    created: '2029-01-22T16:28:32.615Z'
+    created: new Date('2021-01-09T00:25:17.235Z')
   };
   const expectedUser = {
     ...makeExpectedUser([user], maliciousUser),
@@ -309,9 +309,10 @@ function makeSongsFixtures() {
   return { testUsers, testSongs };
 }
 
-function makeMaliciousEmail(user) {
+function makeMaliciousEmail(testUsers) {
+  console.log(testUsers);
   const maliciousEmail = {
-    user_id: user.id,
+    user_id: testUsers.id,
     id: 911,
     email: 'Naughty naughty very naughty <script>alert("xss");</script>',
     created: '2027-01-22T16:28:32.615Z'
@@ -459,7 +460,7 @@ module.exports = {
   makeSongsArray,
   makeEmailsArray,
 
-  makeExpectedUser,
+  // makeExpectedUser,
   makeExpectedShow,
   makeExpectedVideo,
   makeExpectedSong,

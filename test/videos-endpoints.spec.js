@@ -1,5 +1,4 @@
 const knex = require('knex');
-const fixtures = require('./videos-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
@@ -57,7 +56,7 @@ describe('Videos Endpoints', () => {
     });
 
     context(`Given an XSS attack video`, () => {
-      const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo(
+      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo(
         testUsers[0]
       );
 
@@ -105,7 +104,7 @@ describe('Videos Endpoints', () => {
     });
 
     context(`Given an XSS attack video`, () => {
-      const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo();
+      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo();
 
       beforeEach('insert malicious video', () => {
         return db.into('videos').insert([maliciousVideo]);
@@ -212,7 +211,7 @@ describe('Videos Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo();
+      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo();
       return supertest(app)
         .post(`/api/videos`)
         .set('Authorization', `Bearer ${authToken}`)
