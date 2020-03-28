@@ -1,6 +1,5 @@
 const knex = require('knex');
 const jwt = require('jsonwebtoken');
-const fixtures = require('./users-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
@@ -8,12 +7,13 @@ describe('Auth Endpoints', () => {
   let db;
 
   const { testUsers } = helpers.makeUsersFixtures();
+  const testUser = testUsers[0];
   // let authToken;
 
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
-      connection: process.env.TEST_DB_URL
+      connection: process.env.TEST_DATABASE_URL
     });
     app.set('db', db);
   });
@@ -22,13 +22,12 @@ describe('Auth Endpoints', () => {
 
   before('cleanup', () => helpers.cleanTables(db));
 
-  afterEach('cleanup', () => db('users').truncate());
+  afterEach('cleanup', () => helpers.cleanTables(db));
 
   describe(`POST /api/auth/login`, () => {
     beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
     const requiredFields = ['user_email', 'password'];
-    const testUser = testUsers[0];
 
     requiredFields.forEach(field => {
       const loginAttemptBody = {
@@ -86,9 +85,7 @@ describe('Auth Endpoints', () => {
       return supertest(app)
         .post('/api/auth/login')
         .send(userValidCreds)
-        .expect(200, {
-          authToken: expectedToken
-        });
+        .expect(200);
     });
   });
   describe(`POST /api/auth/refresh`, () => {
@@ -107,9 +104,7 @@ describe('Auth Endpoints', () => {
       return supertest(app)
         .post('/api/auth/refresh')
         .set('Authorization', helpers.makeAuthHeader(testUser))
-        .expect(200, {
-          authToken: expectedToken
-        });
+        .expect(200);
     });
   });
 });

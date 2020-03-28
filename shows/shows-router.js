@@ -44,7 +44,7 @@ showsRouter
       .then(show => {
         if (!show) {
           return res.status(404).json({
-            error: { message: `Show doesn't exist` }
+            error: { message: `Show does not exist` }
           });
         }
         res.show = show;

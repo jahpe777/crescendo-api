@@ -25,14 +25,13 @@ describe('Protected endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  beforeEach(
-    'insert content',
-    () => helpers.seedUsers(db, testUsers),
-    helpers.seedShowsTables(db, testShows),
-    helpers.seedVideosTables(db, testVideos),
-    helpers.seedSongsTables(db, testSongs),
-    helpers.seedEmailsTables(db, testEmails)
-  );
+  beforeEach('insert content', () => {
+    helpers.seedUsers(db, testUsers),
+      helpers.seedShowsTables(db, testUsers, testShows),
+      helpers.seedVideosTables(db, testUsers, testVideos),
+      helpers.seedSongsTables(db, testUsers, testSongs),
+      helpers.seedEmailsTables(db, testUsers, testEmails);
+  });
 
   const protectedEndpoints = [
     {

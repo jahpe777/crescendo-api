@@ -16,22 +16,7 @@ function makeUsersArray() {
       soundcloud: 'https://soundcloud.com/beachhouse',
       bandcamp: 'https://beachhouse.bandcamp.com/',
       contact_email: 'beach@gmail.com',
-      created: new Date('2029-01-22T16:28:32.615Z')
-    },
-    {
-      id: 2,
-      user_email: 'grizzlybear@gmail.com',
-      password: 'password',
-      image:
-        'https://media.npr.org/assets/img/2012/10/19/gbtomhinesonline1_20120910_164358_wide-3be89be66fe4f26b79bb6121dcef343dd942d722.jpg?s=1400',
-      facebook: 'https://www.facebook.com/grizzlybear/',
-      twitter: 'https://twitter.com/grizzlybear?lang=en',
-      instagram: 'https://www.instagram.com/grizzlybear/?hl=en',
-      youtube: 'https://www.youtube.com/channel/UCi6v8K4tGMwmXc_ND4DMVoQ',
-      soundcloud: 'https://soundcloud.com/grizzlybearband',
-      bandcamp: 'https://grizzlybearbrooklyn.bandcamp.com/',
-      contact_email: 'grizzly@gmail.com',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: '2029-01-22T16:28:32.615Z'
     }
   ];
 }
@@ -41,18 +26,10 @@ function makeShowsArray(users) {
     {
       user_id: 1,
       id: 1,
-      date: '2021-04-12',
+      date: '2021-05-13',
       city: 'Orlando, FL',
       venue: 'Boo',
-      created: new Date('2028-01-22T16:28:32.615Z')
-    },
-    {
-      user_id: 2,
-      id: 2,
-      date: '2021-05-12',
-      city: 'Miami, FL',
-      venue: 'Who',
-      created: new Date('2028-01-22T16:28:32.615Z')
+      created: '2028-01-22T16:28:32.615Z'
     }
   ];
 }
@@ -63,13 +40,7 @@ function makeVideosArray(users) {
       user_id: 1,
       id: 1,
       video: 'https://www.youtube.com/embed/OS6duOoxctw',
-      created: new Date('2029-01-22T16:28:32.615Z')
-    },
-    {
-      user_id: 2,
-      id: 3,
-      video: 'https://www.youtube.com/embed/OJpC9JqSnJk',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: '2029-01-22T16:28:32.615Z'
     }
   ];
 }
@@ -79,16 +50,9 @@ function makeSongsArray(users) {
     {
       user_id: 1,
       id: 1,
-      video:
+      song:
         'https://bandcamp.com/EmbeddedPlayer/album=1030921102/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',
-      created: new Date('2029-01-22T16:28:32.615Z')
-    },
-    {
-      user_id: 2,
-      id: 2,
-      video:
-        'https://bandcamp.com/EmbeddedPlayer/album=4076584652/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: '2029-01-22T16:28:32.615Z'
     }
   ];
 }
@@ -99,23 +63,41 @@ function makeEmailsArray(users) {
       user_id: 1,
       id: 1,
       email: 'house@gmail.com',
-      created: new Date('2028-01-22T16:28:32.615Z')
-    },
-    {
-      user_id: 2,
-      id: 6,
-      email: 'bear@gmail.com',
-      created: new Date('2029-01-22T16:28:32.615Z')
+      created: '2028-01-22T16:28:32.615Z'
     }
   ];
 }
 
+function makeExpectedUser() {
+  const expectedUser = users.find(user => user.id === show.user_id);
+
+  return {
+    user_id: show.user_id,
+    id: show.id,
+    date: show.date,
+    city: show.city,
+    venue: show.venue,
+    created: show.created.toISOString(),
+    showUser: {
+      id: showUser.id,
+      user_email: showUser.user_email,
+      password: showUser.password,
+      image: showUser.image,
+      facebook: showUser.facebook,
+      twitter: showUser.twitter,
+      instagram: showUser.instagram,
+      youtube: showUser.youtube,
+      soundcloud: showUser.soundcloud,
+      bandcamp: showUser.bandcamp,
+      contact_email: showUser.contact_email,
+      created: showUser.created.toISOString(),
+      modified: showUser.modified || null
+    }
+  };
+}
+
 function makeExpectedShow(users, show) {
   const showUser = users.find(user => user.id === show.user_id);
-
-  // const number_of_comments = comments.filter(
-  //   comment => comment.article_id === article.id
-  // ).length;
 
   return {
     user_id: show.user_id,
@@ -145,10 +127,6 @@ function makeExpectedShow(users, show) {
 function makeExpectedVideo(users, video) {
   const videoUser = users.find(user => user.id === video.user_id);
 
-  // const number_of_comments = comments.filter(
-  //   comment => comment.article_id === article.id
-  // ).length;
-
   return {
     user_id: video.user_id,
     id: video.id,
@@ -174,10 +152,6 @@ function makeExpectedVideo(users, video) {
 
 function makeExpectedSong(users, song) {
   const songUser = users.find(user => user.id === song.user_id);
-
-  // const number_of_comments = comments.filter(
-  //   comment => comment.article_id === article.id
-  // ).length;
 
   return {
     user_id: song.user_id,
@@ -205,10 +179,6 @@ function makeExpectedSong(users, song) {
 function makeExpectedEmail(users, email) {
   const emailUser = users.find(user => user.id === email.user_id);
 
-  // const number_of_comments = comments.filter(
-  //   comment => comment.article_id === article.id
-  // ).length;
-
   return {
     user_id: email.user_id,
     id: email.id,
@@ -232,29 +202,6 @@ function makeExpectedEmail(users, email) {
   };
 }
 
-// function makeExpectedArticleComments(users, articleId, comments) {
-//   const expectedComments = comments.filter(
-//     comment => comment.article_id === articleId
-//   );
-
-//   return expectedComments.map(comment => {
-//     const commentUser = users.find(user => user.id === comment.user_id);
-//     return {
-//       id: comment.id,
-//       text: comment.text,
-//       date_created: comment.date_created.toISOString(),
-//       user: {
-//         id: commentUser.id,
-//         user_name: commentUser.user_name,
-//         full_name: commentUser.full_name,
-//         nickname: commentUser.nickname,
-//         date_created: commentUser.date_created.toISOString(),
-//         date_modified: commentUser.date_modified || null
-//       }
-//     };
-//   });
-// }
-
 function makeMaliciousUser(user) {
   const maliciousUser = {
     id: 911,
@@ -268,7 +215,7 @@ function makeMaliciousUser(user) {
     soundcloud: 'https://soundcloud.com/beachhouse',
     bandcamp: 'https://beachhouse.bandcamp.com/',
     contact_email: 'beach@gmail.com',
-    created: new Date()
+    created: '2029-01-22T16:28:32.615Z'
   };
   const expectedUser = {
     ...makeExpectedUser([user], maliciousUser),
@@ -284,9 +231,7 @@ function makeMaliciousUser(user) {
 
 function makeUsersFixtures() {
   const testUsers = makeUsersArray();
-  // const testShows = makeShowsArray(testUsers);
-  // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers /*testShows testComments*/ };
+  return { testUsers };
 }
 
 function makeMaliciousShow(user) {
@@ -296,7 +241,7 @@ function makeMaliciousShow(user) {
     date: '2022-04-12',
     city: 'Naughty naughty very naughty <script>alert("xss");</script>',
     venue: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
-    created: new Date()
+    created: '2029-01-22T16:28:32.615Z'
   };
   const expectedShow = {
     ...makeExpectedShow([user], maliciousShow),
@@ -313,8 +258,7 @@ function makeMaliciousShow(user) {
 function makeShowsFixtures() {
   const testUsers = makeUsersArray();
   const testShows = makeShowsArray(testUsers);
-  // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers, testShows /*testComments*/ };
+  return { testUsers, testShows };
 }
 
 function makeMaliciousVideo(user) {
@@ -322,7 +266,7 @@ function makeMaliciousVideo(user) {
     user_id: user.id,
     id: 911,
     video: 'Naughty naughty very naughty <script>alert("xss");</script>',
-    created: new Date()
+    created: '2029-01-22T16:28:32.615Z'
   };
   const expectedVideo = {
     ...makeExpectedVideo([user], maliciousVideo),
@@ -338,8 +282,7 @@ function makeMaliciousVideo(user) {
 function makeVideosFixtures() {
   const testUsers = makeUsersArray();
   const testVideos = makeVideosArray(testUsers);
-  // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers, testVideos /*testComments*/ };
+  return { testUsers, testVideos };
 }
 
 function makeMaliciousSong(user) {
@@ -347,7 +290,7 @@ function makeMaliciousSong(user) {
     user_id: user.id,
     id: 911,
     song: 'Naughty naughty very naughty <script>alert("xss");</script>',
-    created: new Date()
+    created: '2029-01-22T16:28:32.615Z'
   };
   const expectedSong = {
     ...makeExpectedSong([user], maliciousSong),
@@ -363,8 +306,7 @@ function makeMaliciousSong(user) {
 function makeSongsFixtures() {
   const testUsers = makeUsersArray();
   const testSongs = makeSongsArray(testUsers);
-  // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers, testSongs /*testComments*/ };
+  return { testUsers, testSongs };
 }
 
 function makeMaliciousEmail(user) {
@@ -372,7 +314,7 @@ function makeMaliciousEmail(user) {
     user_id: user.id,
     id: 911,
     email: 'Naughty naughty very naughty <script>alert("xss");</script>',
-    created: new Date()
+    created: '2027-01-22T16:28:32.615Z'
   };
   const expectedEmail = {
     ...makeExpectedEmail([user], maliciousEmail),
@@ -388,8 +330,7 @@ function makeMaliciousEmail(user) {
 function makeEmailsFixtures() {
   const testUsers = makeUsersArray();
   const testEmails = makeEmailsArray(testUsers);
-  // const testComments = makeCommentsArray(testUsers, testArticles);
-  return { testUsers, testEmails /*testComments*/ };
+  return { testUsers, testEmails };
 }
 
 function cleanTables(db) {
@@ -444,18 +385,7 @@ function seedShowsTables(db, users, shows) {
     await trx.raw(`SELECT setval('shows_id_seq', ?)`, [
       shows[shows.length - 1].id
     ]);
-    // only insert comments if there are some, also update the sequence counter
-    // if (comments.length) {
-    //   await trx.into('blogful_comments').insert(comments);
-    //   await trx.raw(`SELECT setval('blogful_comments_id_seq', ?)`, [
-    //     comments[comments.length - 1].id
-    //   ]);
-    // }
   });
-}
-
-function seedMaliciousShow(db, user, show) {
-  return seedUsers(db, [user]).then(() => db.into('shows').insert([show]));
 }
 
 function seedVideosTables(db, users, videos) {
@@ -467,18 +397,7 @@ function seedVideosTables(db, users, videos) {
     await trx.raw(`SELECT setval('videos_id_seq', ?)`, [
       videos[videos.length - 1].id
     ]);
-    // only insert comments if there are some, also update the sequence counter
-    // if (comments.length) {
-    //   await trx.into('blogful_comments').insert(comments);
-    //   await trx.raw(`SELECT setval('blogful_comments_id_seq', ?)`, [
-    //     comments[comments.length - 1].id
-    //   ]);
-    // }
   });
-}
-
-function seedMaliciousVideo(db, user, video) {
-  return seedUsers(db, [user]).then(() => db.into('videos').insert([video]));
 }
 
 function seedSongsTables(db, users, songs) {
@@ -490,18 +409,7 @@ function seedSongsTables(db, users, songs) {
     await trx.raw(`SELECT setval('songs_id_seq', ?)`, [
       songs[songs.length - 1].id
     ]);
-    // only insert comments if there are some, also update the sequence counter
-    // if (comments.length) {
-    //   await trx.into('blogful_comments').insert(comments);
-    //   await trx.raw(`SELECT setval('blogful_comments_id_seq', ?)`, [
-    //     comments[comments.length - 1].id
-    //   ]);
-    // }
   });
-}
-
-function seedMaliciousSong(db, user, song) {
-  return seedUsers(db, [user]).then(() => db.into('songs').insert([song]));
 }
 
 function seedEmailsTables(db, users, emails) {
@@ -513,14 +421,23 @@ function seedEmailsTables(db, users, emails) {
     await trx.raw(`SELECT setval('emails_id_seq', ?)`, [
       emails[emails.length - 1].id
     ]);
-    // only insert comments if there are some, also update the sequence counter
-    // if (comments.length) {
-    //   await trx.into('blogful_comments').insert(comments);
-    //   await trx.raw(`SELECT setval('blogful_comments_id_seq', ?)`, [
-    //     comments[comments.length - 1].id
-    //   ]);
-    // }
   });
+}
+
+function seedMaliciousUser(db, user) {
+  return seedUsers(db).then(() => db.into('users').insert([user]));
+}
+
+function seedMaliciousShow(db, user, show) {
+  return seedUsers(db, [user]).then(() => db.into('shows').insert([show]));
+}
+
+function seedMaliciousVideo(db, user, video) {
+  return seedUsers(db, [user]).then(() => db.into('videos').insert([video]));
+}
+
+function seedMaliciousSong(db, user, song) {
+  return seedUsers(db, [user]).then(() => db.into('songs').insert([song]));
 }
 
 function seedMaliciousEmail(db, user, email) {
@@ -542,6 +459,7 @@ module.exports = {
   makeSongsArray,
   makeEmailsArray,
 
+  makeExpectedUser,
   makeExpectedShow,
   makeExpectedVideo,
   makeExpectedSong,
@@ -562,12 +480,12 @@ module.exports = {
   cleanTables,
 
   seedUsers,
-
   seedShowsTables,
   seedVideosTables,
   seedSongsTables,
   seedEmailsTables,
 
+  seedMaliciousUser,
   seedMaliciousShow,
   seedMaliciousVideo,
   seedMaliciousSong,

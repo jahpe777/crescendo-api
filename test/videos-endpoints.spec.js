@@ -57,7 +57,9 @@ describe('Videos Endpoints', () => {
     });
 
     context(`Given an XSS attack video`, () => {
-      const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo();
+      const { maliciousVideo, expectedVideo } = fixtures.makeMaliciousVideo(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious video', () => {
         return db.into('videos').insert([maliciousVideo]);

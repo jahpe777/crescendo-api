@@ -1,9 +1,8 @@
 const knex = require('knex');
-const fixtures = require('./shows-fixtures');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Shows Endpoints', () => {
+describe('Shows Endpoints', () => {
   let db;
 
   const { testUsers, testShows } = helpers.makeShowsFixtures();
@@ -57,7 +56,7 @@ describe.only('Shows Endpoints', () => {
     });
 
     context(`Given an XSS attack show`, () => {
-      const { maliciousShow, expectedShow } = fixtures.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
 
       beforeEach('insert malicious show', () => {
         return db.into('shows').insert([maliciousShow]);
@@ -83,7 +82,7 @@ describe.only('Shows Endpoints', () => {
           .get(`/api/shows/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `Show doesn't exist` }
+            error: { message: `Show does not exist` }
           });
       });
     });
@@ -104,7 +103,7 @@ describe.only('Shows Endpoints', () => {
     });
 
     context(`Given an XSS attack show`, () => {
-      const { maliciousShow, expectedShow } = fixtures.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
 
       beforeEach('insert malicious show', () => {
         return db.into('shows').insert([maliciousShow]);
@@ -260,7 +259,7 @@ describe.only('Shows Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousShow, expectedShow } = fixtures.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
       const updatedMaliciousShow = { show: { ...maliciousShow } };
       return supertest(app)
         .post(`/api/shows`)
