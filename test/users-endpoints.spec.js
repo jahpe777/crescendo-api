@@ -2,7 +2,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.skip('Users Endpoints', () => {
+describe('Users Endpoints', () => {
   let db;
 
   const { testUsers } = helpers.makeVideosFixtures();
@@ -28,7 +28,6 @@ describe.skip('Users Endpoints', () => {
       .post('/api/auth/login')
       .send(testUsers[0])
       .then(res => {
-        console.log(res.body.authToken);
         authToken = res.body.authToken;
       });
   });

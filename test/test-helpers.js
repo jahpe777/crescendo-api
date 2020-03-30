@@ -68,33 +68,27 @@ function makeEmailsArray(users) {
   ];
 }
 
-// function makeExpectedUser(users) {
-//   const showUser = users.find(user => user.id === show.user_id);
+function makeExpectedUser(users) {
+  const user = users;
 
-//   return {
-//     user_id: show.user_id,
-//     id: show.id,
-//     date: show.date,
-//     city: show.city,
-//     venue: show.venue,
-//     created: show.created.toISOString(),
-//     showUser: {
-//       id: showUser.id,
-//       user_email: showUser.user_email,
-//       password: showUser.password,
-//       image: showUser.image,
-//       facebook: showUser.facebook,
-//       twitter: showUser.twitter,
-//       instagram: showUser.instagram,
-//       youtube: showUser.youtube,
-//       soundcloud: showUser.soundcloud,
-//       bandcamp: showUser.bandcamp,
-//       contact_email: showUser.contact_email,
-//       created: showUser.created.toISOString(),
-//       modified: showUser.modified || null
-//     }
-//   };
-// }
+  return {
+    user: {
+      id: user.id,
+      user_email: user.user_email,
+      password: user.password,
+      image: user.image,
+      facebook: user.facebook,
+      twitter: user.twitter,
+      instagram: user.instagram,
+      youtube: user.youtube,
+      soundcloud: user.soundcloud,
+      bandcamp: user.bandcamp,
+      contact_email: user.contact_email,
+      created: user.created.toISOString(),
+      modified: user.modified || null
+    }
+  };
+}
 
 function makeExpectedShow(users, show) {
   const showUser = users.find(user => user.id === show.user_id);
@@ -309,10 +303,9 @@ function makeSongsFixtures() {
   return { testUsers, testSongs };
 }
 
-function makeMaliciousEmail(testUsers) {
-  console.log(testUsers);
+function makeMaliciousEmail(user) {
   const maliciousEmail = {
-    user_id: testUsers.id,
+    user_id: /*user.id*/ 1,
     id: 911,
     email: 'Naughty naughty very naughty <script>alert("xss");</script>',
     created: '2027-01-22T16:28:32.615Z'
@@ -460,7 +453,7 @@ module.exports = {
   makeSongsArray,
   makeEmailsArray,
 
-  // makeExpectedUser,
+  makeExpectedUser,
   makeExpectedShow,
   makeExpectedVideo,
   makeExpectedSong,
