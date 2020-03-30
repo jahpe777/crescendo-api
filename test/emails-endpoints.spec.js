@@ -105,6 +105,7 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
+      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
         user
       );
