@@ -56,7 +56,10 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
+        user
+      );
+      console.log('hjkjhvhj', user);
 
       beforeEach('insert malicious email', () => {
         return db.into('emails').insert([maliciousEmail]);
@@ -102,7 +105,9 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
+        user
+      );
 
       beforeEach('insert malicious email', () => {
         return db.into('emails').insert([maliciousEmail]);
@@ -209,7 +214,9 @@ describe('Emails Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail();
+      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
+        user
+      );
       return supertest(app)
         .post(`/api/emails`)
         .set('Authorization', `Bearer ${authToken}`)
