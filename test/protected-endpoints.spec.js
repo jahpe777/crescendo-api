@@ -5,11 +5,17 @@ const helpers = require('./test-helpers');
 describe('Protected endpoints', function() {
   let db;
 
-  const { testUsers } = helpers.makeUsersFixtures();
-  const { testShows } = helpers.makeShowsFixtures();
-  const { testVideos } = helpers.makeVideosFixtures();
-  const { testSongs } = helpers.makeSongsFixtures();
-  const { testEmails } = helpers.makeEmailsFixtures();
+  const {
+    testUsers,
+    testShows,
+    testVideos,
+    testSongs,
+    testEmails
+  } = helpers.makeUsersFixtures();
+  // const { testShows } = helpers.makeShowsFixtures();
+  // const { testVideos } = helpers.makeVideosFixtures();
+  // const { testSongs } = helpers.makeSongsFixtures();
+  // const { testEmails } = helpers.makeEmailsFixtures();
 
   before('make knex instance', () => {
     db = knex({

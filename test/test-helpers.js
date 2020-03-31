@@ -70,7 +70,6 @@ function makeEmailsArray(users) {
 
 function makeExpectedUser(users) {
   const user = users;
-
   return {
     user: {
       id: user.id,
@@ -92,7 +91,7 @@ function makeExpectedUser(users) {
 
 function makeExpectedShow(users, show) {
   const showUser = users.find(user => user.id === show.user_id);
-
+  console.log(showUser);
   return {
     user_id: show.user_id,
     id: show.id,
@@ -177,7 +176,7 @@ function makeExpectedEmail(users, email) {
     user_id: email.user_id,
     id: email.id,
     email: email.email,
-    created: email.created.toISOString(),
+    created: email.created /*.toISOString()*/,
     emailUser: {
       id: emailUser.id,
       user_email: emailUser.user_email,
@@ -225,7 +224,11 @@ function makeMaliciousUser(user) {
 
 function makeUsersFixtures() {
   const testUsers = makeUsersArray();
-  return { testUsers };
+  const testShows = makeShowsArray(testUsers);
+  const testVideos = makeVideosArray(testUsers);
+  const testSongs = makeSongsArray(testUsers);
+  const testEmails = makeEmailsArray(testUsers);
+  return { testUsers, testShows, testVideos, testSongs, testEmails };
 }
 
 function makeMaliciousShow(user) {
@@ -305,7 +308,7 @@ function makeSongsFixtures() {
 
 function makeMaliciousEmail(user) {
   const maliciousEmail = {
-    user_id: /*user.id*/ 1,
+    user_id: user.id,
     id: 911,
     email: 'Naughty naughty very naughty <script>alert("xss");</script>',
     created: '2027-01-22T16:28:32.615Z'

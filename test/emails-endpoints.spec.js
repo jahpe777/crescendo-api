@@ -56,10 +56,10 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
+      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
         user
       );
-      console.log('hjkjhvhj', user);
 
       beforeEach('insert malicious email', () => {
         return db.into('emails').insert([maliciousEmail]);
@@ -215,6 +215,7 @@ describe('Emails Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
+      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
         user
       );
