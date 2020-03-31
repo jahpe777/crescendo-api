@@ -8,7 +8,6 @@ describe('Auth Endpoints', () => {
 
   const { testUsers } = helpers.makeUsersFixtures();
   const testUser = testUsers[0];
-  // let authToken;
 
   before('make knex instance', () => {
     db = knex({

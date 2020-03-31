@@ -1,9 +1,9 @@
 const xss = require('xss');
 
 const VideosService = {
-  // getAllVideos(knex) {
-  //   return knex.select('*').from('videos');
-  // },
+  getAllVideos(knex) {
+    return knex.select('*').from('videos');
+  },
 
   getAllVideosByUser(knex, user_id) {
     return knex

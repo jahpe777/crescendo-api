@@ -1,9 +1,9 @@
 const xss = require('xss');
 
 const SongsService = {
-  // getAllSongs(knex) {
-  //   return knex.select('*').from('songs');
-  // },
+  getAllSongs(knex) {
+    return knex.select('*').from('songs');
+  },
 
   getAllSongsByUser(knex, user_id) {
     return knex

@@ -77,7 +77,6 @@ describe('Users Endpoints', () => {
       });
 
       it('removes XSS attack content', () => {
-        console.log(authToken);
         return supertest(app)
           .get(`/api/users/${maliciousUser.id}`)
           .set('Authorization', `Bearer ${authToken}`)
