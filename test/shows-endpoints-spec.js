@@ -56,7 +56,9 @@ describe('Shows Endpoints', () => {
     });
 
     context(`Given an XSS attack show`, () => {
-      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious show', () => {
         return db.into('shows').insert([maliciousShow]);
@@ -103,7 +105,9 @@ describe('Shows Endpoints', () => {
     });
 
     context(`Given an XSS attack show`, () => {
-      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious show', () => {
         return db.into('shows').insert([maliciousShow]);
@@ -259,7 +263,9 @@ describe('Shows Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow();
+      const { maliciousShow, expectedShow } = helpers.makeMaliciousShow(
+        testUsers[0]
+      );
       const updatedMaliciousShow = { show: { ...maliciousShow } };
       return supertest(app)
         .post(`/api/shows`)

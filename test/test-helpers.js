@@ -91,14 +91,14 @@ function makeExpectedUser(users) {
 
 function makeExpectedShow(users, show) {
   const showUser = users.find(user => user.id === show.user_id);
-  console.log(showUser);
+
   return {
     user_id: show.user_id,
     id: show.id,
     date: show.date,
     city: show.city,
     venue: show.venue,
-    created: show.created.toISOString(),
+    created: show.created /*.toISOString()*/,
     showUser: {
       id: showUser.id,
       user_email: showUser.user_email,

@@ -104,7 +104,9 @@ describe('Videos Endpoints', () => {
     });
 
     context(`Given an XSS attack video`, () => {
-      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo();
+      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious video', () => {
         return db.into('videos').insert([maliciousVideo]);
@@ -211,7 +213,9 @@ describe('Videos Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo();
+      const { maliciousVideo, expectedVideo } = helpers.makeMaliciousVideo(
+        testUsers[0]
+      );
       return supertest(app)
         .post(`/api/videos`)
         .set('Authorization', `Bearer ${authToken}`)
