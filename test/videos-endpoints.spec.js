@@ -94,7 +94,7 @@ describe('Videos Endpoints', () => {
       });
 
       it('responds with 200 and the specified video', () => {
-        const videoId = 2;
+        const videoId = 1;
         const expectedVideo = testVideos[videoId - 1];
         return supertest(app)
           .get(`/api/videos/${videoId}`)
@@ -142,7 +142,7 @@ describe('Videos Endpoints', () => {
       });
 
       it('removes the video by ID from the store', () => {
-        const idToRemove = 2;
+        const idToRemove = 1;
         const expectedVideos = testVideos.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/videos/${idToRemove}`)

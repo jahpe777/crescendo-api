@@ -53,7 +53,7 @@ showsRouter
       .catch(next);
   })
   .get(requireAuth, (req, res, next) => {
-    res.json(SongsService.serializeShow(res.show));
+    res.json(ShowsService.serializeShow(res.show));
   })
   .delete(requireAuth, (req, res, next) => {
     ShowsService.deleteShow(req.app.get('db'), req.params.show_id)

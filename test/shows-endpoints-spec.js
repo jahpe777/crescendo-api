@@ -95,7 +95,7 @@ describe('Shows Endpoints', () => {
       });
 
       it('responds with 200 and the specified show', () => {
-        const showId = 2;
+        const showId = 1;
         const expectedShow = testShows[showId - 1];
         return supertest(app)
           .get(`/api/shows/${showId}`)
@@ -133,7 +133,7 @@ describe('Shows Endpoints', () => {
           .delete(`/api/shows/123`)
           .set('Authorization', `Bearer ${authToken}`)
           .expect(404, {
-            error: { message: `Show doesn't exist` }
+            error: { message: `Show does not exist` }
           });
       });
     });
@@ -144,7 +144,7 @@ describe('Shows Endpoints', () => {
       });
 
       it('removes the show by ID from the store', () => {
-        const idToRemove = 2;
+        const idToRemove = 1;
         const expectedShows = testShows.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/shows/${idToRemove}`)
@@ -236,11 +236,9 @@ describe('Shows Endpoints', () => {
 
     it('adds a new show to the store', () => {
       const newShow = {
-        show: {
-          date: '01/14/2020',
-          city: 'Los Angeles, CA',
-          venue: 'Los Globos'
-        }
+        date: '01/14/2020',
+        city: 'Los Angeles, CA',
+        venue: 'Los Globos'
       };
       return supertest(app)
         .post(`/api/shows`)
@@ -248,9 +246,9 @@ describe('Shows Endpoints', () => {
         .send(newShow)
         .expect(201)
         .expect(res => {
-          expect(res.body.date).to.eql(newShow.show.date);
-          expect(res.body.city).to.eql(newShow.show.city);
-          expect(res.body.venue).to.eql(newShow.show.venue);
+          expect(res.body.date).to.eql(newShow.date);
+          expect(res.body.city).to.eql(newShow.city);
+          expect(res.body.venue).to.eql(newShow.venue);
           expect(res.body).to.have.property('id');
           expect(res.headers.location).to.eql(`/api/shows/${res.body.id}`);
         })
@@ -266,7 +264,7 @@ describe('Shows Endpoints', () => {
       const { maliciousShow, expectedShow } = helpers.makeMaliciousShow(
         testUsers[0]
       );
-      const updatedMaliciousShow = { show: { ...maliciousShow } };
+      const updatedMaliciousShow = { ...maliciousShow };
       return supertest(app)
         .post(`/api/shows`)
         .set('Authorization', `Bearer ${authToken}`)

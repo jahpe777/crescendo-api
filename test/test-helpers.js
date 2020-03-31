@@ -16,7 +16,7 @@ function makeUsersArray() {
       soundcloud: 'https://soundcloud.com/beachhouse',
       bandcamp: 'https://beachhouse.bandcamp.com/',
       contact_email: 'beach@gmail.com',
-      created: new Date('2021-01-09T00:25:17.235Z')
+      created: '2021-01-09T00:25:17.235Z'
     }
   ];
 }
@@ -26,10 +26,10 @@ function makeShowsArray(users) {
     {
       user_id: 1,
       id: 1,
-      date: '2021-05-13',
+      date: '05/13/2021',
       city: 'Orlando, FL',
       venue: 'Boo',
-      created: new Date('2021-01-09T00:25:17.235Z')
+      created: '2021-01-09T00:25:17.235Z'
     }
   ];
 }
@@ -40,7 +40,7 @@ function makeVideosArray(users) {
       user_id: 1,
       id: 1,
       video: 'https://www.youtube.com/embed/OS6duOoxctw',
-      created: new Date('2021-01-09T00:25:17.235Z')
+      created: '2021-01-09T00:25:17.235Z'
     }
   ];
 }
@@ -52,7 +52,7 @@ function makeSongsArray(users) {
       id: 1,
       song:
         'https://bandcamp.com/EmbeddedPlayer/album=1030921102/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/transparent=true/',
-      created: new Date('2021-01-09T00:25:17.235Z')
+      created: '2021-01-09T00:25:17.235Z'
     }
   ];
 }
@@ -63,29 +63,25 @@ function makeEmailsArray(users) {
       user_id: 1,
       id: 1,
       email: 'house@gmail.com',
-      created: new Date('2021-01-09T00:25:17.235Z')
+      created: '2021-01-09T00:25:17.235Z'
     }
   ];
 }
 
-function makeExpectedUser(users) {
-  const user = users;
+function makeExpectedUser(user, maliciousUser) {
   return {
-    user: {
-      id: user.id,
-      user_email: user.user_email,
-      password: user.password,
-      image: user.image,
-      facebook: user.facebook,
-      twitter: user.twitter,
-      instagram: user.instagram,
-      youtube: user.youtube,
-      soundcloud: user.soundcloud,
-      bandcamp: user.bandcamp,
-      contact_email: user.contact_email,
-      created: user.created.toISOString(),
-      modified: user.modified || null
-    }
+    id: maliciousUser.id,
+    user_email: maliciousUser.user_email,
+    password: maliciousUser.password,
+    image: user.image,
+    facebook: user.facebook,
+    twitter: user.twitter,
+    instagram: user.instagram,
+    youtube: user.youtube,
+    soundcloud: user.soundcloud,
+    bandcamp: user.bandcamp,
+    contact_email: user.contact_email,
+    created: user.created /*.toISOString()*/
   };
 }
 
@@ -111,7 +107,7 @@ function makeExpectedShow(users, show) {
       soundcloud: showUser.soundcloud,
       bandcamp: showUser.bandcamp,
       contact_email: showUser.contact_email,
-      created: showUser.created.toISOString(),
+      created: showUser.created /*.toISOString()*/,
       modified: showUser.modified || null
     }
   };
@@ -124,7 +120,7 @@ function makeExpectedVideo(users, video) {
     user_id: video.user_id,
     id: video.id,
     video: video.video,
-    created: video.created.toISOString(),
+    created: video.created /*.toISOString()*/,
     videoUser: {
       id: videoUser.id,
       user_email: videoUser.user_email,
@@ -137,7 +133,7 @@ function makeExpectedVideo(users, video) {
       soundcloud: videoUser.soundcloud,
       bandcamp: videoUser.bandcamp,
       contact_email: videoUser.contact_email,
-      created: videoUser.created.toISOString(),
+      created: videoUser.created /*.toISOString()*/,
       modified: videoUser.modified || null
     }
   };
@@ -150,7 +146,7 @@ function makeExpectedSong(users, song) {
     user_id: song.user_id,
     id: song.id,
     song: song.song,
-    created: song.created.toISOString(),
+    created: song.created /*.toISOString()*/,
     songUser: {
       id: songUser.id,
       user_email: songUser.user_email,
@@ -163,7 +159,7 @@ function makeExpectedSong(users, song) {
       soundcloud: songUser.soundcloud,
       bandcamp: songUser.bandcamp,
       contact_email: songUser.contact_email,
-      created: songUser.created.toISOString(),
+      created: songUser.created /*.toISOString()*/,
       modified: songUser.modified || null
     }
   };
@@ -189,7 +185,7 @@ function makeExpectedEmail(users, email) {
       soundcloud: emailUser.soundcloud,
       bandcamp: emailUser.bandcamp,
       contact_email: emailUser.contact_email,
-      created: emailUser.created.toISOString(),
+      created: emailUser.created /*.toISOString()*/,
       modified: emailUser.modified || null
     }
   };
@@ -199,7 +195,7 @@ function makeMaliciousUser(user) {
   const maliciousUser = {
     id: 911,
     user_email: 'house@gmail.com',
-    password: 'beach',
+    password: 'B3@ch!234',
     image: 'Naughty naughty very naughty <script>alert("xss");</script>',
     facebook: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
     twitter: 'https://twitter.com/beaccchhoussse?lang=en',
@@ -211,7 +207,7 @@ function makeMaliciousUser(user) {
     created: new Date('2021-01-09T00:25:17.235Z')
   };
   const expectedUser = {
-    ...makeExpectedUser([user], maliciousUser),
+    ...makeExpectedUser(user, maliciousUser),
     image:
       'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
     facebook: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`
@@ -235,7 +231,7 @@ function makeMaliciousShow(user) {
   const maliciousShow = {
     user_id: user.id,
     id: 911,
-    date: '2022-04-12',
+    date: '04/12/2022',
     city: 'Naughty naughty very naughty <script>alert("xss");</script>',
     venue: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
     created: '2029-01-22T16:28:32.615Z'

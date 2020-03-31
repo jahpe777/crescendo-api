@@ -56,7 +56,9 @@ describe('Songs Endpoints', () => {
     });
 
     context(`Given an XSS attack song`, () => {
-      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious song', () => {
         return db.into('songs').insert([maliciousSong]);
@@ -92,7 +94,7 @@ describe('Songs Endpoints', () => {
       });
 
       it('responds with 200 and the specified song', () => {
-        const songId = 2;
+        const songId = 1;
         const expectedSong = testSongs[songId - 1];
         return supertest(app)
           .get(`/api/songs/${songId}`)
@@ -102,7 +104,9 @@ describe('Songs Endpoints', () => {
     });
 
     context(`Given an XSS attack song`, () => {
-      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong(
+        testUsers[0]
+      );
 
       beforeEach('insert malicious song', () => {
         return db.into('songs').insert([maliciousSong]);
@@ -138,7 +142,7 @@ describe('Songs Endpoints', () => {
       });
 
       it('removes the song by ID from the store', () => {
-        const idToRemove = 2;
+        const idToRemove = 1;
         const expectedSongs = testSongs.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/songs/${idToRemove}`)
@@ -211,7 +215,9 @@ describe('Songs Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong();
+      const { maliciousSong, expectedSong } = helpers.makeMaliciousSong(
+        testUsers[0]
+      );
       return supertest(app)
         .post(`/api/songs`)
         .set('Authorization', `Bearer ${authToken}`)

@@ -40,8 +40,7 @@ usersRouter
     );
   })
   .post(jsonParser, (req, res, next) => {
-    const { user_email, password } = req.body;
-
+    const { user_email, password = '' } = req.body;
     if (user_email == null) {
       return res.status(400).json({
         error: {

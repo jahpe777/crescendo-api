@@ -56,9 +56,8 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
-        user
+        testUsers[0]
       );
 
       beforeEach('insert malicious email', () => {
@@ -95,7 +94,7 @@ describe('Emails Endpoints', () => {
       });
 
       it('responds with 200 and the specified email', () => {
-        const emailId = 2;
+        const emailId = 1;
         const expectedEmail = testEmails[emailId - 1];
         return supertest(app)
           .get(`/api/emails/${emailId}`)
@@ -105,9 +104,8 @@ describe('Emails Endpoints', () => {
     });
 
     context(`Given an XSS attack email`, () => {
-      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
-        user
+        testUsers[0]
       );
 
       beforeEach('insert malicious email', () => {
@@ -144,7 +142,7 @@ describe('Emails Endpoints', () => {
       });
 
       it('removes the email by ID from the store', () => {
-        const idToRemove = 2;
+        const idToRemove = 1;
         const expectedEmails = testEmails.filter(bm => bm.id !== idToRemove);
         return supertest(app)
           .delete(`/api/emails/${idToRemove}`)
@@ -215,9 +213,8 @@ describe('Emails Endpoints', () => {
     });
 
     it('removes XSS attack content from response', () => {
-      let user = testUsers[0];
       const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
-        user
+        testUsers[0]
       );
       return supertest(app)
         .post(`/api/emails`)
