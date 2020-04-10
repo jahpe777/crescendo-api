@@ -382,11 +382,9 @@ function seedShowsTables(db, users, shows) {
 }
 
 function seedVideosTables(db, users, videos) {
-  // use a transaction to group the queries and auto rollback on any failure
   return db.transaction(async trx => {
     await seedUsers(trx, users);
     await trx.into('videos').insert(videos);
-    // update the auto sequence to match the forced id values
     await trx.raw(`SELECT setval('videos_id_seq', ?)`, [
       videos[videos.length - 1].id
     ]);
@@ -394,11 +392,9 @@ function seedVideosTables(db, users, videos) {
 }
 
 function seedSongsTables(db, users, songs) {
-  // use a transaction to group the queries and auto rollback on any failure
   return db.transaction(async trx => {
     await seedUsers(trx, users);
     await trx.into('songs').insert(songs);
-    // update the auto sequence to match the forced id values
     await trx.raw(`SELECT setval('songs_id_seq', ?)`, [
       songs[songs.length - 1].id
     ]);
@@ -406,11 +402,9 @@ function seedSongsTables(db, users, songs) {
 }
 
 function seedEmailsTables(db, users, emails) {
-  // use a transaction to group the queries and auto rollback on any failure
   return db.transaction(async trx => {
     await seedUsers(trx, users);
     await trx.into('emails').insert(emails);
-    // update the auto sequence to match the forced id values
     await trx.raw(`SELECT setval('emails_id_seq', ?)`, [
       emails[emails.length - 1].id
     ]);
