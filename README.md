@@ -16,44 +16,55 @@ https://powerful-basin-50906.herokuapp.com/api
 ### Users
 
 GET /users
+
 PATCH /users
+
 POST /users
 
 GET /loggedin
 
 GET /users/:id
+
 DELETE /users/:id
 
 ### Shows
 
 GET /shows
+
 POST /shows
 
 GET /shows/:show_id
+
 DELETE /shows/:show_id
 
 ### Videos
 
 GET /videos
+
 POST /videos
 
 GET /videos/video_id
+
 DELETE /videos/:video_id
 
 ### Songs
 
 GET /songs
+
 POST /songs
 
 GET /songs/:song_id
+
 DELETE /songs/:song_id
 
 ### Emails
 
 GET /songs
+
 POST /songs
 
 GET /songs/:email_id
+
 DELETE /songs/:email_id
 
 ### Auth
