@@ -1,30 +1,63 @@
 # Crescendo API
 
-URL HERE
+https://powerful-basin-50906.herokuapp.com
 
-The api for the Crescendo app was created with Node JS. It uses a database with tables for the shows and the subscribers. The api uses Express, Morgan, CORS and Knex. For testing I used supertest and mocha.
+The api for the Crescendo app was created with Node JS. It uses a database with tables for the users, shows, videos, songs, and emails. The api uses Express, Morgan, CORS and Knex. For testing I used supertest and mocha.
 
-There is currently no authentication.
+The server incorporates secure authentication and authorization practices.
 
 ## API Documentation
 
-The Crescendo API is organized around REST. It accepts standard GET, POST, and DELETE requests for shows and subscribers. The API returns JSON encoded responses.
+The Crescendo API is organized around REST. It accepts standard GET,POST, PATCH, and DELETE requests for users, shows, videos, songs, emails, and auth. The API returns JSON encoded responses.
 
 All API calls begin with:
-URL HERE
+https://powerful-basin-50906.herokuapp.com/api
 
 ### Users
 
-GET /users GET /users/user_id POST /users DELETE /users/:user_id
+GET /users
+PATCH /users
+POST /users
+
+GET /loggedin
+
+GET /users/:id
+DELETE /users/:id
 
 ### Shows
 
-GET /shows GET /shows/:show_id POST /shows DELETE /shows/:show_id
+GET /shows
+POST /shows
+
+GET /shows/:show_id
+DELETE /shows/:show_id
 
 ### Videos
 
-GET /videos GET /videos/video_id POST /videos DELETE /videos/:video_id
+GET /videos
+POST /videos
+
+GET /videos/video_id
+DELETE /videos/:video_id
 
 ### Songs
 
-GET /songs GET /songs/:song_id POST /songs DELETE /songs/:song_id
+GET /songs
+POST /songs
+
+GET /songs/:song_id
+DELETE /songs/:song_id
+
+### Emails
+
+GET /songs
+POST /songs
+
+GET /songs/:email_id
+DELETE /songs/:email_id
+
+### Auth
+
+POST /login
+
+POST /refresh
