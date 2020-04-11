@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS users(
     soundcloud TEXT,
     bandcamp TEXT,
     contact_email TEXT,
+    band_name TEXT,
+    band_slug TEXT,
     created TIMESTAMP NOT NULL DEFAULT now()
 );
 

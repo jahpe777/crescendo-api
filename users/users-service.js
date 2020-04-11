@@ -24,6 +24,32 @@ const UsersService = {
       .first();
   },
 
+  getBySlug(knex, slug) {
+    return knex
+      .from('users')
+      .select('*')
+      .where('band_slug', slug)
+      .first();
+  },
+
+  generateSlug(knex, band_name, cb) {
+    let slug = band_name
+      .toLowerCase()
+      .replace(' ', '-')
+      .trim();
+    knex
+      .from('users')
+      .select('*')
+      .where('band_slug', slug)
+      .first()
+      .then(user => {
+        if (user) {
+          slug += '-' + Math.ceil(Math.random() * 10000);
+        }
+        cb(slug);
+      });
+  },
+
   deleteUser(knex, id) {
     return knex('users')
       .where('id', id)
@@ -77,7 +103,9 @@ const UsersService = {
       soundcloud: xss(user.soundcloud),
       bandcamp: xss(user.bandcamp),
       contact_email: xss(user.contact_email),
-      created: new Date(user.created)
+      created: new Date(user.created),
+      band_name: xss(user.band_name),
+      band_slug: xss(user.band_slug)
     };
   }
 };

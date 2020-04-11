@@ -15,6 +15,7 @@ https://powerful-basin-50906.herokuapp.com/api
 
 ### Users
 
+```
 GET /users
 
 PATCH /users
@@ -26,9 +27,11 @@ GET /loggedin
 GET /users/:id
 
 DELETE /users/:id
+```
 
 ### Shows
 
+```
 GET /shows
 
 POST /shows
@@ -36,6 +39,7 @@ POST /shows
 GET /shows/:show_id
 
 DELETE /shows/:show_id
+```
 
 ### Videos
 

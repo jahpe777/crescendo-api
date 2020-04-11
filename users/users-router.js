@@ -40,11 +40,11 @@ usersRouter
     );
   })
   .post(jsonParser, (req, res, next) => {
-    const { user_email, password = '' } = req.body;
-    if (user_email == null) {
+    const { user_email, band_name, password = '' } = req.body;
+    if (user_email == null || band_name == null) {
       return res.status(400).json({
         error: {
-          message: `Supply a valid email`
+          message: `Supply a valid email and band name`
         }
       });
     }
@@ -58,21 +58,25 @@ usersRouter
         if (hasUserWithUserName)
           return res.status(400).json({ error: `Username already taken` });
 
-        return UsersService.hashPassword(password).then(hashedPassword => {
-          const newUser = {
-            user_email,
-            password: hashedPassword,
-            created: 'now()'
-          };
+        UsersService.generateSlug(req.app.get('db'), band_name, band_slug => {
+          return UsersService.hashPassword(password).then(hashedPassword => {
+            const newUser = {
+              user_email,
+              band_name,
+              band_slug,
+              password: hashedPassword,
+              created: 'now()'
+            };
 
-          return UsersService.insertUser(req.app.get('db'), newUser).then(
-            user => {
-              res
-                .status(201)
-                .location(path.posix.join(req.originalUrl, `/${user.id}`))
-                .json(UsersService.serializeUser(user));
-            }
-          );
+            return UsersService.insertUser(req.app.get('db'), newUser).then(
+              user => {
+                res
+                  .status(201)
+                  .location(path.posix.join(req.originalUrl, `/${user.id}`))
+                  .json(UsersService.serializeUser(user));
+              }
+            );
+          });
         });
       })
       .catch(next);
@@ -80,6 +84,12 @@ usersRouter
 
 usersRouter.route('/loggedin').get(requireAuth, (req, res, next) => {
   res.json(UsersService.serializeUser(req.user));
+});
+
+usersRouter.route('/details/:bandSlug').get((req, res, next) => {
+  UsersService.getBySlug(req.app.get('db'), req.params.bandSlug).then(band => {
+    res.json(UsersService.serializeUser(band));
+  });
 });
 
 usersRouter
