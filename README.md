@@ -15,62 +15,62 @@ https://powerful-basin-50906.herokuapp.com/api
 
 ### Users
 
-[Get All Users](https://www.example.com)
+[Get All Users](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-users.md)
 
-[Update User](https://www.example.com)
+[Update User](https://github.com/jahpe777/crescendo-api/blob/master/examples/patch-users.md)
 
-[Add New User](https://www.example.com)
+[Add New User](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-users.md)
 
-[Logged In](https://www.example.com)
+[Logged In](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-loggedin.md)
 
-[Get Band Slug](https://www.example.com)
+[Get Band Slug](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-users-bandslug.md)
 
-[Get Specific User](https://www.example.com)
+[Get Specific User](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-users-id.md)
 
-[Delete Specific User](https://www.example.com)
+[Delete Specific User](https://github.com/jahpe777/crescendo-api/blob/master/examples/delete-users-id.md)
 
 ### Shows
 
-[Get All Shows](https://www.example.com)
+[Get All Shows](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-shows.md)
 
-[Add New Show](https://www.example.com)
+[Add New Show](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-shows.md)
 
-[Get Specific Show](https://www.example.com)
+[Get Specific Show](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-shows-id.md)
 
-[Delete Specific Show](https://www.example.com)
+[Delete Specific Show](https://github.com/jahpe777/crescendo-api/blob/master/examples/delete-shows-id.md)
 
 ### Videos
 
-[Get All Videos](https://www.example.com)
+[Get All Videos](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-videos.md)
 
-[Add New Video](https://www.example.com)
+[Add New Video](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-videos.md)
 
-[Get Specific Video](https://www.example.com)
+[Get Specific Video](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-videos-id.md)
 
-[Delete Specific Video](https://www.example.com)
+[Delete Specific Video](https://github.com/jahpe777/crescendo-api/blob/master/examples/delete-videos-id.md)
 
 ### Songs
 
-[Get All Songs](https://www.example.com)
+[Get All Songs](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-songs.md)
 
-[Add New Song](https://www.example.com)
+[Add New Song](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-songs.md)
 
-[Get Specific Song](https://www.example.com)
+[Get Specific Song](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-songs-id.md)
 
-[Delete Specific Song](https://www.example.com)
+[Delete Specific Song](https://github.com/jahpe777/crescendo-api/blob/master/examples/delete-songs-id.md)
 
 ### Emails
 
-[Get All Emails](https://www.example.com)
+[Get All Emails](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-emails.md)
 
-[Add New Email](https://www.example.com)
+[Add New Email](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-emails.md)
 
-[Get Specific Email](https://www.example.com)
+[Get Specific Email](https://github.com/jahpe777/crescendo-api/blob/master/examples/get-emails-id.md)
 
-[Delete Specific Email](https://www.example.com)
+[Delete Specific Email](https://github.com/jahpe777/crescendo-api/blob/master/examples/delete-emails-id.md)
 
 ### Auth
 
-[Login With Auth](https://www.example.com)
+[Login With Auth](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-auth-login.md)
 
-[Refresh Auth](https://www.example.com)
+[Refresh Auth](https://github.com/jahpe777/crescendo-api/blob/master/examples/post-auth-refresh.md)
