@@ -81,7 +81,7 @@ function makeExpectedUser(user, maliciousUser) {
     soundcloud: user.soundcloud,
     bandcamp: user.bandcamp,
     contact_email: user.contact_email,
-    created: user.created /*.toISOString()*/
+    created: user.created
   };
 }
 
@@ -94,7 +94,7 @@ function makeExpectedShow(users, show) {
     date: show.date,
     city: show.city,
     venue: show.venue,
-    created: show.created /*.toISOString()*/,
+    created: show.created,
     showUser: {
       id: showUser.id,
       user_email: showUser.user_email,
@@ -107,7 +107,7 @@ function makeExpectedShow(users, show) {
       soundcloud: showUser.soundcloud,
       bandcamp: showUser.bandcamp,
       contact_email: showUser.contact_email,
-      created: showUser.created /*.toISOString()*/,
+      created: showUser.created,
       modified: showUser.modified || null
     }
   };
@@ -120,7 +120,7 @@ function makeExpectedVideo(users, video) {
     user_id: video.user_id,
     id: video.id,
     video: video.video,
-    created: video.created /*.toISOString()*/,
+    created: video.created,
     videoUser: {
       id: videoUser.id,
       user_email: videoUser.user_email,
@@ -133,7 +133,7 @@ function makeExpectedVideo(users, video) {
       soundcloud: videoUser.soundcloud,
       bandcamp: videoUser.bandcamp,
       contact_email: videoUser.contact_email,
-      created: videoUser.created /*.toISOString()*/,
+      created: videoUser.created,
       modified: videoUser.modified || null
     }
   };
@@ -146,7 +146,7 @@ function makeExpectedSong(users, song) {
     user_id: song.user_id,
     id: song.id,
     song: song.song,
-    created: song.created /*.toISOString()*/,
+    created: song.created,
     songUser: {
       id: songUser.id,
       user_email: songUser.user_email,
@@ -159,7 +159,7 @@ function makeExpectedSong(users, song) {
       soundcloud: songUser.soundcloud,
       bandcamp: songUser.bandcamp,
       contact_email: songUser.contact_email,
-      created: songUser.created /*.toISOString()*/,
+      created: songUser.created,
       modified: songUser.modified || null
     }
   };
@@ -172,7 +172,7 @@ function makeExpectedEmail(users, email) {
     user_id: email.user_id,
     id: email.id,
     email: email.email,
-    created: email.created /*.toISOString()*/,
+    created: email.created,
     emailUser: {
       id: emailUser.id,
       user_email: emailUser.user_email,
@@ -185,7 +185,7 @@ function makeExpectedEmail(users, email) {
       soundcloud: emailUser.soundcloud,
       bandcamp: emailUser.bandcamp,
       contact_email: emailUser.contact_email,
-      created: emailUser.created /*.toISOString()*/,
+      created: emailUser.created,
       modified: emailUser.modified || null
     }
   };
