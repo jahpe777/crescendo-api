@@ -8,71 +8,69 @@ The server incorporates secure authentication and authorization practices.
 
 ## API Documentation
 
-The Crescendo API is organized around REST. It accepts standard GET,POST, PATCH, and DELETE requests for users, shows, videos, songs, emails, and auth. The API returns JSON encoded responses.
+The Crescendo API is organized around REST. It accepts standard GET, POST, PATCH, and DELETE requests for users, shows, videos, songs, emails, and auth. The API returns JSON encoded responses.
 
 All API calls begin with:
 https://powerful-basin-50906.herokuapp.com/api
 
 ### Users
 
-```
-GET /users
+[Get All Users](https://www.example.com)
 
-PATCH /users
+[Update User](https://www.example.com)
 
-POST /users
+[Add New User](https://www.example.com)
 
-GET /loggedin
+[Logged In](https://www.example.com)
 
-GET /users/:id
+[Get Band Slug](https://www.example.com)
 
-DELETE /users/:id
-```
+[Get Specific User](https://www.example.com)
+
+[Delete Specific User](https://www.example.com)
 
 ### Shows
 
-```
-GET /shows
+[Get All Shows](https://www.example.com)
 
-POST /shows
+[Add New Show](https://www.example.com)
 
-GET /shows/:show_id
+[Get Specific Show](https://www.example.com)
 
-DELETE /shows/:show_id
-```
+[Delete Specific Show](https://www.example.com)
 
 ### Videos
 
-GET /videos
+[Get All Videos](https://www.example.com)
 
-POST /videos
+[Add New Video](https://www.example.com)
 
-GET /videos/video_id
+[Get Specific Video](https://www.example.com)
 
-DELETE /videos/:video_id
+[Delete Specific Video](https://www.example.com)
 
 ### Songs
 
-GET /songs
+[Get All Songs](https://www.example.com)
 
-POST /songs
+[Add New Song](https://www.example.com)
 
-GET /songs/:song_id
+[Get Specific Song](https://www.example.com)
 
-DELETE /songs/:song_id
+[Delete Specific Song](https://www.example.com)
 
 ### Emails
 
-GET /songs
+[Get All Emails](https://www.example.com)
 
-POST /songs
+[Add New Email](https://www.example.com)
 
-GET /songs/:email_id
+[Get Specific Email](https://www.example.com)
 
-DELETE /songs/:email_id
+[Delete Specific Email](https://www.example.com)
 
 ### Auth
 
-POST /login
+[Login With Auth](https://www.example.com)
 
-POST /refresh
+[Refresh Auth](https://www.example.com)

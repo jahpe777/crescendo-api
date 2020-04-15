@@ -13,8 +13,8 @@ emailsRouter
       .then(emails => res.json(emails.map(EmailsService.serializeEmail)))
       .catch(next);
   })
-  .post(jsonBodyParser, requireAuth, (req, res, next) => {
-    const { email } = req.body;
+  .post(jsonBodyParser, (req, res, next) => {
+    const { email, band_id } = req.body;
 
     if (email == null) {
       return res.status(400).json({
@@ -24,7 +24,7 @@ emailsRouter
       });
     }
     EmailsService.insertEmail(req.app.get('db'), {
-      user_id: req.user.id,
+      user_id: band_id,
       email
     })
       .then(email => {

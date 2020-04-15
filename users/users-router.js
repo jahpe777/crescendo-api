@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
 const UsersService = require('./users-service');
+const VideosService = require('../videos/videos-service');
+const SongsService = require('../songs/songs-service');
+const ShowsService = require('../shows/shows-service');
 const usersRouter = express.Router();
 const jsonParser = express.json();
 const { requireAuth } = require('../middleware/jwt-auth');
@@ -25,10 +28,7 @@ usersRouter
       'contact_email'
     ];
     const newUpdate = req.body;
-    /*
-      newUpdate:{contactEmail:'test@test.com'}
-      newUpdate:{youtube:'...',image:'...',facebook:'...'}
-    */
+
     Object.keys(newUpdate).forEach(key => {
       if (!possibleKeys.includes(key)) {
         res.status(400).json({ error: `${key} is not a valid key` });
@@ -87,8 +87,19 @@ usersRouter.route('/loggedin').get(requireAuth, (req, res, next) => {
 });
 
 usersRouter.route('/details/:bandSlug').get((req, res, next) => {
-  UsersService.getBySlug(req.app.get('db'), req.params.bandSlug).then(band => {
-    res.json(UsersService.serializeUser(band));
+  let knexInstance = req.app.get('db');
+  UsersService.getBySlug(knexInstance, req.params.bandSlug).then(band => {
+    VideosService.getAllVideosByUser(knexInstance, band.id).then(videos => {
+      SongsService.getAllSongsByUser(knexInstance, band.id).then(songs => {
+        ShowsService.getAllShowsByUser(knexInstance, band.id).then(shows => {
+          band = UsersService.serializeUser(band);
+          band.videos = videos.map(VideosService.serializeVideo);
+          band.songs = songs.map(SongsService.serializeSong);
+          band.shows = shows.map(ShowsService.serializeShow);
+          res.json(band);
+        });
+      });
+    });
   });
 });
 
