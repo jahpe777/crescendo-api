@@ -16,6 +16,8 @@ function makeUsersArray() {
       soundcloud: 'https://soundcloud.com/beachhouse',
       bandcamp: 'https://beachhouse.bandcamp.com/',
       contact_email: 'beach@gmail.com',
+      band_name: 'Beach House',
+      band_slug: 'beach-house',
       created: '2021-01-09T00:25:17.235Z'
     }
   ];
@@ -81,6 +83,8 @@ function makeExpectedUser(user, maliciousUser) {
     soundcloud: user.soundcloud,
     bandcamp: user.bandcamp,
     contact_email: user.contact_email,
+    band_name: user.band_name,
+    band_slug: user.band_slug,
     created: user.created
   };
 }
@@ -107,6 +111,8 @@ function makeExpectedShow(users, show) {
       soundcloud: showUser.soundcloud,
       bandcamp: showUser.bandcamp,
       contact_email: showUser.contact_email,
+      band_name: showUser.band_name,
+      band_slug: showUser.band_slug,
       created: showUser.created,
       modified: showUser.modified || null
     }
@@ -133,6 +139,8 @@ function makeExpectedVideo(users, video) {
       soundcloud: videoUser.soundcloud,
       bandcamp: videoUser.bandcamp,
       contact_email: videoUser.contact_email,
+      band_name: videoUser.band_name,
+      band_slug: videoUser.band_slug,
       created: videoUser.created,
       modified: videoUser.modified || null
     }
@@ -159,6 +167,8 @@ function makeExpectedSong(users, song) {
       soundcloud: songUser.soundcloud,
       bandcamp: songUser.bandcamp,
       contact_email: songUser.contact_email,
+      band_name: songUser.band_name,
+      band_slug: songUser.band_slug,
       created: songUser.created,
       modified: songUser.modified || null
     }
@@ -185,6 +195,8 @@ function makeExpectedEmail(users, email) {
       soundcloud: emailUser.soundcloud,
       bandcamp: emailUser.bandcamp,
       contact_email: emailUser.contact_email,
+      band_name: emailUser.band_name,
+      band_slug: emailUser.band_slug,
       created: emailUser.created,
       modified: emailUser.modified || null
     }
@@ -204,6 +216,8 @@ function makeMaliciousUser(user) {
     soundcloud: 'https://soundcloud.com/beachhouse',
     bandcamp: 'https://beachhouse.bandcamp.com/',
     contact_email: 'beach@gmail.com',
+    band_name: 'Beach House',
+    band_slug: 'beach-house',
     created: new Date('2021-01-09T00:25:17.235Z')
   };
   const expectedUser = {

@@ -189,41 +189,5 @@ describe('Emails Endpoints', () => {
           error: { message: `Supply a valid email` }
         });
     });
-
-    it('adds a new email to the store', () => {
-      const newEmail = {
-        email: 'lauren@gmail.com'
-      };
-      return supertest(app)
-        .post(`/api/emails`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(newEmail)
-        .expect(201)
-        .expect(res => {
-          expect(res.body.email).to.eql(newEmail.email);
-          expect(res.body).to.have.property('id');
-          expect(res.headers.location).to.eql(`/api/emails/${res.body.id}`);
-        })
-        .then(res =>
-          supertest(app)
-            .get(`/api/emails/${res.body.id}`)
-            .set('Authorization', `Bearer ${authToken}`)
-            .expect(res.body)
-        );
-    });
-
-    it('removes XSS attack content from response', () => {
-      const { maliciousEmail, expectedEmail } = helpers.makeMaliciousEmail(
-        testUsers[0]
-      );
-      return supertest(app)
-        .post(`/api/emails`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(maliciousEmail)
-        .expect(201)
-        .expect(res => {
-          expect(res.body.email).to.eql(expectedEmail.email);
-        });
-    });
   });
 });
